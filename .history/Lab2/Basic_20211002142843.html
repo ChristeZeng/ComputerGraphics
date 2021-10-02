@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <!-- 顶点着色器 -->
+    <script type='x-shader/x-vertex' id='shader-vs'>
+        void main(){
+            gl_Position=vec4(0.0,0.0,0.0,1.0);
+            gl_PointSize=100.0;
+        }
+    </script>
+    <!-- 片段着色器 -->
+    <script type='x-shader/x-fragment' id='shader-fs'>
+        void main(){
+            gl_FragColor=vec4(1.0,1.0,0.0,1.0);
+        }
+    </script>
+</head>
+
+<body>
+    <canvas id='webgl' width='400' height='400'></canvas>
+</body>
+<script>
+
+    // 1.获取webgl
+    var canvas = document.getElementById('webgl');
+    var gl = canvas.getContext('webgl');
+
+    // 2.清空屏幕
+    gl.clearColor(0.5, 0.5, 0.5, 1.0);
+    gl.clear(gl.COLOR_BUFFER_BIT);
+
+    // 3.初始化着色器
+    var vs_source = document.getElementById('shader-vs').innerHTML,
+        fs_source = document.getElementById('shader-fs').innerHTML;
+
+    // 创建顶点着色器对象
+    var vertexShader = gl.createShader(gl.VERTEX_SHADER);
+    // 绑定资源
+    gl.shaderSource(vertexShader, vs_source);
+    // 编译着色器
+    gl.compileShader(vertexShader);
+
+    var fragmentShader = gl.createShader(gl.FRAGMENT_SHADER);
+    gl.shaderSource(fragmentShader, fs_source);
+    gl.compileShader(fragmentShader);
+
+    // 创建一个着色器程序
+    var glProgram = gl.createProgram();
+
+    // 把前面创建的二个着色器对象添加到着色器程序中
+    gl.attachShader(glProgram, vertexShader);
+    gl.attachShader(glProgram, fragmentShader);
+
+    // 把着色器程序链接成一个完整的程序
+    gl.linkProgram(glProgram);
+
+    // 使用这个完整的程序
+    gl.useProgram(glProgram);
+
+    // 4.绘制一个点
+    gl.drawArrays(gl.POINTS, 0, 1);
+
+</script>
+
+</html>

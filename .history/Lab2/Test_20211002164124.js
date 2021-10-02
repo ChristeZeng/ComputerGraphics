@@ -21,7 +21,7 @@ function main()
     const fsSource = `
         void main()
         {
-            gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);
+            gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);
         }
     `;
     
@@ -76,17 +76,12 @@ function loadShader(gl, type, source)
 
 function initBuffers(gl)
 {
-    var N = 100;
-    var vertices = [0.0, 0.0];
-    var r = 0.5;
-
-    for (var i = 0; i <= N; i++) 
-    {
-        var theta = i * 2 * Math.PI / N;
-        var x = r * Math.sin(theta);
-        var y = r * Math.cos(theta);
-        vertices.push(x, y);
-    }
+    var vertices = [
+        1.0,  1.0,
+        -1.0, 1.0,
+        1.0,  -1.0,
+        -1.0, -1.0,
+    ];
 
     //创建缓冲区对象
     const positionBuffer = gl.createBuffer();
@@ -94,16 +89,13 @@ function initBuffers(gl)
     gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
     // 向缓冲区对象写入数据
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
-    return {
-            position: positionBuffer,
-            vertex: vertices
-        };
+    return {position: positionBuffer};
 }
 
 function drawBasic(gl, buffers, position, shaderProgram)
 {
     //将背景重置为黑色
-    gl.clearColor(1.0, 1.0, 1.0, 1.0);  
+    gl.clearColor(0.0, 0.0, 0.0, 1.0);  
     //清除canvas
     gl.clear(gl.COLOR_BUFFER_BIT);
     
@@ -114,5 +106,5 @@ function drawBasic(gl, buffers, position, shaderProgram)
     gl.useProgram(shaderProgram);
     
     //利用TRIANGLE_STRIP参数三角拟合
-    gl.drawArrays(gl.TRIANGLE_FAN, 0, buffers.vertex.length / 2);
+    gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
 }

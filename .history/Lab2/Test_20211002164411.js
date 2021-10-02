@@ -21,7 +21,7 @@ function main()
     const fsSource = `
         void main()
         {
-            gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);
+            gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);
         }
     `;
     
@@ -87,23 +87,20 @@ function initBuffers(gl)
         var y = r * Math.cos(theta);
         vertices.push(x, y);
     }
-
+    
     //创建缓冲区对象
     const positionBuffer = gl.createBuffer();
     //将缓冲区对象绑定到目标
     gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
     // 向缓冲区对象写入数据
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
-    return {
-            position: positionBuffer,
-            vertex: vertices
-        };
+    return {position: positionBuffer};
 }
 
 function drawBasic(gl, buffers, position, shaderProgram)
 {
     //将背景重置为黑色
-    gl.clearColor(1.0, 1.0, 1.0, 1.0);  
+    gl.clearColor(0.0, 0.0, 0.0, 1.0);  
     //清除canvas
     gl.clear(gl.COLOR_BUFFER_BIT);
     
@@ -114,5 +111,5 @@ function drawBasic(gl, buffers, position, shaderProgram)
     gl.useProgram(shaderProgram);
     
     //利用TRIANGLE_STRIP参数三角拟合
-    gl.drawArrays(gl.TRIANGLE_FAN, 0, buffers.vertex.length / 2);
+    gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
 }

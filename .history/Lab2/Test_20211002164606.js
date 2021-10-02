@@ -21,7 +21,7 @@ function main()
     const fsSource = `
         void main()
         {
-            gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);
+            gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);
         }
     `;
     
@@ -103,7 +103,7 @@ function initBuffers(gl)
 function drawBasic(gl, buffers, position, shaderProgram)
 {
     //将背景重置为黑色
-    gl.clearColor(1.0, 1.0, 1.0, 1.0);  
+    gl.clearColor(0.0, 0.0, 0.0, 1.0);  
     //清除canvas
     gl.clear(gl.COLOR_BUFFER_BIT);
     

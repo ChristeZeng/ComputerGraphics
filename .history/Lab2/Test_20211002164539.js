@@ -21,7 +21,7 @@ function main()
     const fsSource = `
         void main()
         {
-            gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);
+            gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);
         }
     `;
     
@@ -103,7 +103,7 @@ function initBuffers(gl)
 function drawBasic(gl, buffers, position, shaderProgram)
 {
     //将背景重置为黑色
-    gl.clearColor(1.0, 1.0, 1.0, 1.0);  
+    gl.clearColor(0.0, 0.0, 0.0, 1.0);  
     //清除canvas
     gl.clear(gl.COLOR_BUFFER_BIT);
     
@@ -114,5 +114,5 @@ function drawBasic(gl, buffers, position, shaderProgram)
     gl.useProgram(shaderProgram);
     
     //利用TRIANGLE_STRIP参数三角拟合
-    gl.drawArrays(gl.TRIANGLE_FAN, 0, buffers.vertex.length / 2);
+    gl.drawArrays(gl.TRIANGLE_FAN, 0, 4);
 }

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Test</title>
+  <canvas id=c1 width=400 height=400></canvas>
+    <script>
+        ctx = c1.getContext('2d')
+        ctx.fillStyle = '#7ef' // draw blue background with the darker frame
+        ctx.fillRect(0, 0, 400, 400)
+        ctx.fillStyle = '#9ff'
+        ctx.fillRect(10, 10, 400-20, 400-20)
+    
+        var X = 75, W = 50, G = 20
+        ctx.lineWidth = 10
+        var colors = ['blue', 'black', 'red', 'yellow', 'green']
+        var args = [
+            [X,X,W],
+            [X+W+W+G,X,W],
+            [X+W+W+G+W+W+G,X,W],
+            [X+W+G/2,X+W,W],
+            [X+W+G/2+W+W+G,X+W,W]]
+    
+        while (colors.length > 0) {
+            ctx.strokeStyle = colors.shift()
+            ctx.beginPath()
+            ctx.arc.apply(ctx, args.shift().concat([0,Math.PI*2,true]))
+            ctx.stroke()
+        }
+    </script>
+</head>
+<style>
+  body {
+    background-color: #aaaaaa;
+  }
+</style>
+<!-- <body onload="main()">
+    <canvas id="glcanvas" width="640" height="480">
+      你的浏览器似乎不支持或者禁用了HTML5 <code>&lt;canvas&gt;</code> 元素.
+    </canvas>
+</body>   -->
+</html>

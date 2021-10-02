@@ -1,8 +1,6 @@
 function main()
 {
-    //获取canvas元素
-    var canvas = document.getElementById('gl-canvas');
-    //获取webgl上下文
+    var canvas = document.getElementById("gl-canvas");
     var gl = canvas.getContext("webgl");
     if(!gl)
     {
@@ -11,38 +9,35 @@ function main()
     }
 
     const vsSource = `
-        attribute vec4 position;
-        void main()
-        {
-            gl_Position = position;
-        }
+    attribute vec2 position;
+    void main()
+    {
+        gl_Position = vec4(position, 0.0, 1.0);
+    }
     `;
 
     const fsSource = `
         void main()
         {
-            gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);
+            gl_FragColor = vec4(0.0, 0.0, 0.0, 1.0);
         }
     `;
-    
-    //初始化着色器
+
     const shaderProgram = initShaderProgram(gl, vsSource, fsSource);
-    
+    alert("ShaderProgram");
     var position = gl.getAttribLocation(shaderProgram, 'position');
-    //设置顶点缓冲区
+
     const buffers = initBuffers(gl);
-    //绘制图像
+
     drawBasic(gl, buffers, position, shaderProgram);
-    
 }
 
 
 //初始化着色器
 function initShaderProgram(gl, vsSource, fsSource)
 {
-    
-    const vertexShader = loadShader(gl, gl.VERTEX_SHADER, vsSource);
-    const fragmentShader = loadShader(gl, gl.FRAGMENT_SHADER, fsSource);
+    const vertexShader = loadShader(gl, gl.vertexShader, vsSource);
+    const fragmentShader = loadShader(gl. gl.fragmentShader, fsSource);
 
     //创建着色器程序
     const shaderProgram = gl.createProgram();
@@ -76,43 +71,37 @@ function loadShader(gl, type, source)
 
 function initBuffers(gl)
 {
-    var N = 100;
-    var vertices = [0.0, 0.0];
-    var r = 0.5;
-
-    for (var i = 0; i <= N; i++) 
-    {
-        var theta = i * 2 * Math.PI / N;
-        var x = r * Math.sin(theta);
-        var y = r * Math.cos(theta);
-        vertices.push(x, y);
-    }
-
-    //创建缓冲区对象
     const positionBuffer = gl.createBuffer();
-    //将缓冲区对象绑定到目标
     gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
-    // 向缓冲区对象写入数据
+
+    var vertices = [
+        1.0,  1.0,
+        -1.0, 1.0,
+        1.0,  -1.0,
+        -1.0, -1.0,
+    ];
+
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
-    return {
-            position: positionBuffer,
-            vertex: vertices
-        };
+    return {position: positionBuffer};
 }
 
 function drawBasic(gl, buffers, position, shaderProgram)
 {
-    //将背景重置为黑色
-    gl.clearColor(1.0, 1.0, 1.0, 1.0);  
-    //清除canvas
-    gl.clear(gl.COLOR_BUFFER_BIT);
-    
+    gl.clearColor(0.0, 0.0, 0.0, 1.0);  // Clear to black, fully opaque
+    gl.clearDepth(1.0);                 // Clear everything
+    gl.enable(gl.DEPTH_TEST);           // Enable depth testing
+    gl.depthFunc(gl.LEQUAL);            // Near things obscure far things
+    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
+    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
     
     gl.bindBuffer(gl.ARRAY_BUFFER, buffers.position);
+
     gl.vertexAttribPointer(position, 2, gl.FLOAT, false, 0, 0);
-    gl.enableVertexAttribArray(position);
+    gl.enableVertexAttriArray(position);
+
     gl.useProgram(shaderProgram);
     
     //利用TRIANGLE_STRIP参数三角拟合
-    gl.drawArrays(gl.TRIANGLE_FAN, 0, buffers.vertex.length / 2);
+    gl.drawArrays(gl.TRIANGLE_FAN, 0, 4);
 }
