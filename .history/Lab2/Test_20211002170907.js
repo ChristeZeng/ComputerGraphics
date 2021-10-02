@@ -76,33 +76,23 @@ function loadShader(gl, type, source)
 
 function initBuffers(gl)
 {
-    var N = 100;
-    var vertices = [];
-    var r_inner = 0.25;
-    var r_outter = 0.3;
+    // var N = 100;
+    // var vertices = [0.0, 0.0];
+    // var r = 0.5;
 
-    for (var i = 0; i <= N; i++) 
-    {
-        var theta = i * 2 * Math.PI / N;
-        var x_inner = -0.4 + r_inner * Math.sin(theta);
-        var y_inner = r_inner * Math.cos(theta);
-        var x_outter = -0.4 + r_outter * Math.sin(theta);
-        var y_outter = r_outter * Math.cos(theta);
-        vertices.push(x_inner, y_inner);
-        vertices.push(x_outter, y_outter);
-    }
-
-    for (var i = 0; i <= N; i++) 
-    {
-        var theta = i * 2 * Math.PI / N;
-        var x_inner = 0.8 + r_inner * Math.sin(theta);
-        var y_inner = r_inner * Math.cos(theta);
-        var x_outter = 0.8 + r_outter * Math.sin(theta);
-        var y_outter = r_outter * Math.cos(theta);
-        vertices.push(x_inner, y_inner);
-        vertices.push(x_outter, y_outter);
-    }
-
+    // for (var i = 0; i <= N; i++) 
+    // {
+    //     var theta = i * 2 * Math.PI / N;
+    //     var x = r * Math.sin(theta);
+    //     var y = r * Math.cos(theta);
+    //     vertices.push(x, y);
+    // }
+    var vertices = [
+        1.0, 1.0,
+        1.0, -1.0,
+        -1.0, 1.0,
+        -1.0, -1.0,
+    ];
     //创建缓冲区对象
     const positionBuffer = gl.createBuffer();
     //将缓冲区对象绑定到目标
@@ -118,7 +108,7 @@ function initBuffers(gl)
 function drawBasic(gl, buffers, position, shaderProgram)
 {
     //将背景重置为黑色
-    gl.clearColor(0.0, 0.0, 0.0, 1.0);  
+    gl.clearColor(1.0, 1.0, 1.0, 1.0);  
     //清除canvas
     gl.clear(gl.COLOR_BUFFER_BIT);
     
@@ -129,5 +119,5 @@ function drawBasic(gl, buffers, position, shaderProgram)
     gl.useProgram(shaderProgram);
     
     //利用TRIANGLE_STRIP参数三角拟合
-    gl.drawArrays(gl.TRIANGLE_STRIP, 0, buffers.vertex.length / 2);
+    gl.drawArrays(gl.TRIANGLE_FAN, 0, buffers.vertex.length / 2);
 }

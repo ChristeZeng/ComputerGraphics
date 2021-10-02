@@ -77,7 +77,7 @@ function loadShader(gl, type, source)
 function initBuffers(gl)
 {
     var N = 100;
-    var vertices = [];
+    var vertices = [0.0, 0.0];
     var r_inner = 0.25;
     var r_outter = 0.3;
 

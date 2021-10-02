@@ -92,16 +92,16 @@ function initBuffers(gl)
         vertices.push(x_outter, y_outter);
     }
 
-    for (var i = 0; i <= N; i++) 
-    {
-        var theta = i * 2 * Math.PI / N;
-        var x_inner = 0.8 + r_inner * Math.sin(theta);
-        var y_inner = r_inner * Math.cos(theta);
-        var x_outter = 0.8 + r_outter * Math.sin(theta);
-        var y_outter = r_outter * Math.cos(theta);
-        vertices.push(x_inner, y_inner);
-        vertices.push(x_outter, y_outter);
-    }
+    // for (var i = 0; i <= N; i++) 
+    // {
+    //     var theta = i * 2 * Math.PI / N;
+    //     var x_inner = 0.8 + r_inner * Math.sin(theta);
+    //     var y_inner = r_inner * Math.cos(theta);
+    //     var x_outter = 0.8 + r_outter * Math.sin(theta);
+    //     var y_outter = r_outter * Math.cos(theta);
+    //     vertices.push(x_inner, y_inner);
+    //     vertices.push(x_outter, y_outter);
+    // }
 
     //创建缓冲区对象
     const positionBuffer = gl.createBuffer();
