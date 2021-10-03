@@ -63,20 +63,6 @@ function main()
         for (var i = 0; i <= N; i++) 
         {
             var theta = i * 2 * Math.PI / N;
-            var x_inner = -0.26 + r_inner * Math.sin(theta);
-            var y_inner = r_inner * Math.cos(theta);
-            var x_outter = -0.26 + r_outter * Math.sin(theta);
-            var y_outter = r_outter * Math.cos(theta);
-            vertices.push(x_inner, y_inner);
-            vertices.push(x_outter, y_outter);
-        }
-
-        drawRing(vertices, blue);
-        
-        vertices = [];
-        for (var i = 0; i <= N; i++) 
-        {
-            var theta = i * 2 * Math.PI / N;
             var x_inner = r_inner * Math.sin(theta);
             var y_inner = r_inner * Math.cos(theta);
             var x_outter = r_outter * Math.sin(theta);
@@ -85,109 +71,25 @@ function main()
             vertices.push(x_outter, y_outter);
         }
 
-        drawRing(vertices, black);
+        drawRing(red);
         
-        vertices = [];
-        for (var i = 0; i <= N; i++) 
-        {
-            var theta = i * 2 * Math.PI / N;
-            var x_inner = 0.26 + r_inner * Math.sin(theta);
-            var y_inner = r_inner * Math.cos(theta);
-            var x_outter = 0.26 + r_outter * Math.sin(theta);
-            var y_outter = r_outter * Math.cos(theta);
-            vertices.push(x_inner, y_inner);
-            vertices.push(x_outter, y_outter);
-        }
+        // vertices = [];
+        // for (var i = 0; i <= N; i++) 
+        // {
+        //     var theta = i * 2 * Math.PI / N;
+        //     var x_inner = r_inner * Math.sin(theta);
+        //     var y_inner = r_inner * Math.cos(theta);
+        //     var x_outter = r_outter * Math.sin(theta);
+        //     var y_outter = r_outter * Math.cos(theta);
+        //     vertices.push(x_inner, y_inner);
+        //     vertices.push(x_outter, y_outter);
+        // }
 
-        drawRing(vertices, red);
-
-        vertices = [];
-        for (var i = 0; i <= N; i++) 
-        {
-            var theta = i * 2 * Math.PI / N;
-            var x_inner = -0.13 + r_inner * Math.sin(theta);
-            var y_inner = -0.11 + r_inner * Math.cos(theta);
-            var x_outter = -0.13 + r_outter * Math.sin(theta);
-            var y_outter = -0.11 + r_outter * Math.cos(theta);
-            vertices.push(x_inner, y_inner);
-            vertices.push(x_outter, y_outter);
-        }
-
-        drawRing(vertices, yellow);
-
-        vertices = [];
-        for (var i = 0; i <= 100; i++) 
-        {
-            var theta = i * 2 * Math.PI / N;
-            var x_inner = 0.13 + r_inner * Math.sin(theta);
-            var y_inner = -0.11 + r_inner * Math.cos(theta);
-            var x_outter = 0.13 + r_outter * Math.sin(theta);
-            var y_outter = -0.11 + r_outter * Math.cos(theta);
-            vertices.push(x_inner, y_inner);
-            vertices.push(x_outter, y_outter);
-        }
-
-        drawRing(vertices, green);
-        
-        vertices = [];
-        for (var i = 20; i <= 30; i++) 
-        {
-            var theta = i * 2 * Math.PI / N;
-            var x_inner = -0.26 + r_inner * Math.sin(theta);
-            var y_inner = r_inner * Math.cos(theta);
-            var x_outter = -0.26 + r_outter * Math.sin(theta);
-            var y_outter = r_outter * Math.cos(theta);
-            vertices.push(x_inner, y_inner);
-            vertices.push(x_outter, y_outter);
-        }
-
-        drawRing(vertices, blue);
-
-        vertices = [];
-        for (var i = 50; i <= 60; i++) 
-        {
-            var theta = i * 2 * Math.PI / N;
-            var x_inner = r_inner * Math.sin(theta);
-            var y_inner = r_inner * Math.cos(theta);
-            var x_outter = r_outter * Math.sin(theta);
-            var y_outter = r_outter * Math.cos(theta);
-            vertices.push(x_inner, y_inner);
-            vertices.push(x_outter, y_outter);
-        }
-
-        drawRing(vertices, black);
-
-        vertices = [];
-        for (var i = 20; i <= 30; i++) 
-        {
-            var theta = i * 2 * Math.PI / N;
-            var x_inner = r_inner * Math.sin(theta);
-            var y_inner = r_inner * Math.cos(theta);
-            var x_outter = r_outter * Math.sin(theta);
-            var y_outter = r_outter * Math.cos(theta);
-            vertices.push(x_inner, y_inner);
-            vertices.push(x_outter, y_outter);
-        }
-
-        drawRing(vertices, black);
-
-        vertices = [];
-        for (var i = 50; i <= 60; i++) 
-        {
-            var theta = i * 2 * Math.PI / N;
-            var x_inner = 0.26 + r_inner * Math.sin(theta);
-            var y_inner = r_inner * Math.cos(theta);
-            var x_outter = 0.26 + r_outter * Math.sin(theta);
-            var y_outter = r_outter * Math.cos(theta);
-            vertices.push(x_inner, y_inner);
-            vertices.push(x_outter, y_outter);
-        }
-
-        drawRing(vertices, red);
+        // drawRing(black);
            
     }
 
-    function drawRing(vertices, colors)
+    function drawRing(colors)
     {
         //设置画笔为黑色
         gl.uniform3f(color, colors[0], colors[1], colors[2]);
