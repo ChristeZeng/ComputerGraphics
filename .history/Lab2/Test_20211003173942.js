@@ -54,11 +54,6 @@ function main()
         //清除canvas
         gl.clear(gl.COLOR_BUFFER_BIT);
         
-        //计算顶点坐标位置
-        var N = 100;
-        var vertices = [];
-        var r_inner = 0.1;
-        var r_outter = 0.12;
         
         for (var i = 0; i <= N; i++) 
         {
@@ -71,7 +66,7 @@ function main()
             vertices.push(x_outter, y_outter);
         }
 
-        drawRing(vertices, blue);
+        drawRing(-0.26, 0.0, 0, 100, vertices, blue);
         
         vertices = [];
         for (var i = 0; i <= N; i++) 
@@ -187,11 +182,27 @@ function main()
            
     }
 
-    function drawRing(vertices, colors)
+    function drawRing(xoff, yoff, begin, end, vertices, colors)
     {
         //设置画笔为黑色
         gl.uniform3f(color, colors[0], colors[1], colors[2]);
+        
+        //计算顶点坐标位置
+        var N = 100;
+        var vertices = [];
+        var r_inner = 0.1;
+        var r_outter = 0.12;
 
+        for (var i = begin; i <= end; i++) 
+        {
+            var theta = i * 2 * Math.PI / N;
+            var x_inner = xoff + r_inner * Math.sin(theta);
+            var y_inner = yoff + r_inner * Math.cos(theta);
+            var x_outter = xoff + r_outter * Math.sin(theta);
+            var y_outter = yoff + r_outter * Math.cos(theta);
+            vertices.push(x_inner, y_inner);
+            vertices.push(x_outter, y_outter);
+        }
         //创建缓冲区对象
         var positionBuffer = gl.createBuffer();
         //将缓冲区对象绑定到目标
@@ -204,12 +215,6 @@ function main()
         //利用TRIANGLE_STRIP参数三角拟合
         gl.drawArrays(gl.TRIANGLE_STRIP, 0, vertices.length / 2);
     }
-    //gl.uniform3f(color, 1.0, 0.0, 0.0);
-    //设置顶点缓冲区
-    //const buffers = initBuffers(gl, vertices);
-    //绘制图像
-    //drawBasic(gl, buffers, position, shaderProgram);
-    
 }
 
 
@@ -248,48 +253,4 @@ function loadShader(gl, type, source)
         return null;
     }
     return shader;
-}
-
-function initBuffers(gl, vertices)
-{
-    // for (var i = 0; i <= N; i++) 
-    // {
-    //     var theta = i * 2 * Math.PI / N;
-    //     var x_inner = 0.8 + r_inner * Math.sin(theta);
-    //     var y_inner = r_inner * Math.cos(theta);
-    //     var x_outter = 0.8 + r_outter * Math.sin(theta);
-    //     var y_outter = r_outter * Math.cos(theta);
-    //     vertices.push(x_inner, y_inner);
-    //     vertices.push(x_outter, y_outter);
-    // }
-    
-    //创建缓冲区对象
-    const positionBuffer = gl.createBuffer();
-    //将缓冲区对象绑定到目标
-    gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
-    // 向缓冲区对象写入数据
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
-    return {
-            position: positionBuffer,
-            vertex: vertices
-        };
-}
-
-function drawBasic(gl, buffers, position, shaderProgram)
-{
-    //将背景重置为黑色
-    gl.clearColor(0.0, 0.0, 0.0, 1.0);  
-    //清除canvas
-    gl.clear(gl.COLOR_BUFFER_BIT);
-    
-    
-    gl.uniform3f(color, 1.0, 0.0, 0.0);
-
-    gl.bindBuffer(gl.ARRAY_BUFFER, buffers.position);
-    gl.vertexAttribPointer(position, 2, gl.FLOAT, false, 0, 0);
-    gl.enableVertexAttribArray(position);
-    gl.useProgram(shaderProgram);
-    
-    //利用TRIANGLE_STRIP参数三角拟合
-    gl.drawArrays(gl.TRIANGLE_STRIP, 0, buffers.vertex.length / 2);
 }
