@@ -5,16 +5,28 @@ float fEarth = 20.0f;    //地球绕太阳的旋转角度
 float fMoon = 24.0f;    //月球绕地球的旋转角度
 
 void Reshape(int width, int height) {
-    //
+    //修改视口
     glViewport(0, 0, width, height);
+    /*  
+    glMatrixMode()命令将当前矩阵设置成参数所指定的模式，以满足不同绘图所需执行的矩阵变换。
+    一般而言，在需要绘制出对象或要对所绘制对象进行几何变换时，需要将变换矩阵设置成模型视图模式；
+    而当需要对绘制的对象设置某种投影方式时，则需要将变换矩阵设置成投影模式；
+    只有在进行纹理映射时，才需要将变换矩阵设置成纹理模式。
+    对投影矩阵堆栈应用随后的矩阵操作, 为我们的场景增加透视。
+    */
     glMatrixMode(GL_PROJECTION);
+    //重置当前指定的矩阵为单位矩阵
     glLoadIdentity();
-
-    gluPerspective(180.0f, (float)width / (float)height, 1.0f, 1000.0f);
+    //gluPerspective定义的就是相机的内在镜头参数
+    gluPerspective(45.0f, (float)width / (float)height, 1.0f, 1000.0f);
+    //设置完成后切换到模型视图矩阵开始画图
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 }
 
+void DisplaySun() {
+    glPushMatrix
+}
 void Display(void) {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glMatrixMode(GL_MODELVIEW);
@@ -51,14 +63,28 @@ void Idle(void) {
     fMoon  = fMoon  > 360 ? 24.0 : (fMoon  + 0.24f);
     Display();
 }
+
+void GetInputKey(unsigned char key, int x, int y) {
+    if(key == 27)
+        Exit(0);
+}
 int main(int argc, char* argv[]) {
+    
+    //初始化GLUT库
     glutInit(&argc, argv);
+    //指定显示模式，使用双缓冲区
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
-    glutInitWindowPosition(200, 100);
+    //设置窗口位置
+    glutInitWindowPosition(200, 200);
+    //设置窗口大小
     glutInitWindowSize(720, 480);
+    //新建窗口并命名
     glutCreateWindow("SolarSystem");
+    //设置正确投影的函数
     glutReshapeFunc(Reshape);
+    //设置显示函数
     glutDisplayFunc(Display);
+    //设置空闲时期执行函数
     glutIdleFunc(&Idle);
 
     glEnable(GL_DEPTH_TEST);
