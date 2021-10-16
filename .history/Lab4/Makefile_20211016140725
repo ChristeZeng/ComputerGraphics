@@ -1,0 +1,4 @@
+CC = gcc -lGL -lGLU -lglut
+
+Test: Test.c
+	$(CC) -o Test Test.c

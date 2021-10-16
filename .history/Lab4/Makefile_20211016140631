@@ -1,0 +1,4 @@
+CC = g++ -lGL -lGLU -lglut
+
+Test: Test.cpp
+	$(CC) -o Test Test.cpp
