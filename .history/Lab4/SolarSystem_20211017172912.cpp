@@ -125,7 +125,6 @@ void GetInputKey(unsigned char key, int x, int y) {
         eyey += 0.01;
         eyez -= 0.01;
     }
-    gluLookAt (eyex, eyey, eyez, centerx, centery, centerz, upx, upy, upz);
 }
 
 void GetInputMouse(int button, int state, int x, int y) {

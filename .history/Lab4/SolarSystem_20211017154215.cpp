@@ -1,13 +1,11 @@
 #include <GL/glut.h>
 #include <iostream>
-#include <cmath>
 
-#define Pi 3.1415926
 /*Time*/
 GLfloat fEarth        = 2.0f;
 GLfloat fMoon         = 24.0f;
 GLfloat fSun          = 2.0f;
-GLfloat fMerrcury     = 5.0f;
+
 GLfloat Day;
 GLfloat EarthYear;
 
@@ -15,10 +13,9 @@ GLfloat EarthYear;
 GLdouble eyex, eyey, eyez = 10;
 GLdouble centerx, centery, centerz;
 GLdouble upx, upy = 1, upz;
-GLdouble radius;
 
 /*gongzhuan*/
-GLfloat rx = 0.0, ry = 1, rz = 0.1;
+GLfloat rx = 0.0, ry = 1, rz = 1;
 
 void Reshape(int width, int height) {
     //修改视口
@@ -38,49 +35,52 @@ void Reshape(int width, int height) {
     //设置完成后切换到模型视图矩阵开始画图
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
+    //
     gluLookAt (eyex, eyey, eyez, centerx, centery, centerz, upx, upy, upz);
 }
 
 void DisplaySun() {
     glPushMatrix();
     glColor3f(1.0f, 0.0f, 0.0f);
+    glLoadIdentity();
+    gluLookAt (eyex, eyey, eyez, centerx, centery, centerz, upx, upy, upz);
     glTranslatef(0.0f, 0.0f, 0.0f);
-    glRotatef(0, 0.0, 1.0, 0.0);
-    glutSolidSphere(1.5f, 20, 20);
+    glRotatef(Day, 0.0, 1.0, 0.0);
+    glutSolidSphere(1.0f, 20, 20);
     glPopMatrix();
 }
 
 void DisplayMercury() {
     glPushMatrix();
     glColor3f(0.0f, 1.0f, 0.0f);
-
-    glRotatef(fMerrcury, rx, ry, rz + 0.5);   
-    glTranslatef(3.0f, 0.0f, 0.0f);
-    glRotatef(Day, 0.0, 1.0, 0.0);
+    glLoadIdentity();
+    gluLookAt (eyex, eyey, eyez, centerx, centery, centerz, upx, upy, upz);
+    glTranslatef(0.0f, 0.0f, 0.0f);
+    //glRotatef( , 0.0, 1.0, 0.0);
     glutSolidSphere(1.0f, 20, 20);
     glPopMatrix();
 }
 
 void DisplayEarthAndMoon() {
-    glPushMatrix();
+    //glPushMatrix();
     glColor3f(0.0f, 0.0f, 1.0f);
+    glLoadIdentity();
+    gluLookAt (eyex, eyey, eyez, centerx, centery, centerz, upx, upy, upz);
 
     glRotatef(fEarth, rx, ry, rz);       //gong
-    glTranslatef(6.0f, 0.0f, 0.0f);
-    glPushMatrix();
-    glRotatef(Day, 0.0, 1.0, 0.0);       //zizhuan
-    glutSolidSphere(0.8f, 20, 20);
-    glPopMatrix();
+    glRotatef(Day, 0.0, 1.0, 0.0);   //zizhuan
+    glTranslatef(5.0f, 0.0f, 0.0f);
+    glutSolidSphere(0.5f, 20, 20);
 
-    glColor3f(1.0f, 1.0f, 0.0f);
-    glRotatef(fMoon, 0.0, 1.0, 0.3);
-    glTranslatef(1.5f, 0.0f, 0.0f);
-    //glRotatef(Day, 0.0f, 1.0f, 0.0f);
+    glRotatef(6.0f,1.0f,1.0f,1.0f);
+    //self-ro
+    glRotatef(fMoon,0.0f,1.0f,0.0f);
+    glColor3f(1.0f,1.0f,0.0f);
 
-    
+    glTranslatef(1.0f,0.0f,0.0f);
     glutSolidSphere(0.2f, 20, 20);
 
-    glPopMatrix();
+    //glPopMatrix();
 }
 
 
@@ -88,11 +88,9 @@ void Display() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-    gluLookAt (eyex, eyey, eyez, centerx, centery, centerz, upx, upy, upz);
-
+    
     DisplaySun();
     DisplayEarthAndMoon();
-    DisplayMercury();
 
     glFlush();
     glutSwapBuffers();
@@ -102,48 +100,13 @@ void Display() {
 void Idle() {
     Day += 1.0;
     Day = Day >= 360 ? (Day - 360) : Day; 
-    fEarth = fEarth >= 360 ? (fEarth - 360) : (fEarth + 0.3f);
-    fMoon  = fMoon  >= 360 ? (fMoon - 360) : (fMoon  + 2.4f);
-    fMerrcury  = fMerrcury  >= 360 ? (fMerrcury - 360) : (fMoon  + 2.4f);
+    fEarth = fEarth >= 360 ? 2.0f : (fEarth + 0.03f);
+    fMoon  = fMoon  >= 360 ? 24.0 : (fMoon  + 0.24f);
     Display();
 }
 
 void GetInputKey(unsigned char key, int x, int y) {
-    if(key == 'w')
-        eyez -= 2;
-    else if(key == 's')
-        eyez += 2;
-    else if(key == 'a')
-        centerx -= 2;
-    else if(key == 'd')
-        centerx += 2;
-    else if(key == 'q') {
-        eyey = sin(10.0 / 180.0 * Pi) * sqrt(pow(eyez, 2) + pow(eyey, 2));
-        eyez = cos(10.0 / 180.0 * Pi) * sqrt(pow(eyez, 2) + pow(eyey, 2));
-    }
-    else if(key == 'e') {
-        eyey += 0.01;
-        eyez -= 0.01;
-    }
-    gluLookAt (eyex, eyey, eyez, centerx, centery, centerz, upx, upy, upz);
-}
-
-void GetInputMouse(int button, int state, int x, int y) {
-
-    if(button == GLUT_LEFT_BUTTON)
-    {
-        if(state == GLUT_DOWN)
-        {
-            ry -= 0.01;
-            rz += 0.01;
-        }
-        else if(state == GLUT_UP)
-        {
-            ry += 0.01;
-            rz -= 0.01;
-        }
-    }
-
+    
 }
 
 int main(int argc, char* argv[]) {
@@ -164,12 +127,7 @@ int main(int argc, char* argv[]) {
     glutDisplayFunc(Display);
     //设置空闲时期执行函数
     glutIdleFunc(&Idle);
-    //
-    glutKeyboardFunc(GetInputKey);
-    //
-    glutMouseFunc(GetInputMouse);
 
-    radius = eyez;
     glEnable(GL_DEPTH_TEST);
     glClearColor(0.0f, 0.0f, 0.0f, 0.8f);
     glutMainLoop();

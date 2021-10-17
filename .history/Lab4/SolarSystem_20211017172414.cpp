@@ -2,7 +2,6 @@
 #include <iostream>
 #include <cmath>
 
-#define Pi 3.1415926
 /*Time*/
 GLfloat fEarth        = 2.0f;
 GLfloat fMoon         = 24.0f;
@@ -15,7 +14,6 @@ GLfloat EarthYear;
 GLdouble eyex, eyey, eyez = 10;
 GLdouble centerx, centery, centerz;
 GLdouble upx, upy = 1, upz;
-GLdouble radius;
 
 /*gongzhuan*/
 GLfloat rx = 0.0, ry = 1, rz = 0.1;
@@ -118,14 +116,13 @@ void GetInputKey(unsigned char key, int x, int y) {
     else if(key == 'd')
         centerx += 2;
     else if(key == 'q') {
-        eyey = sin(10.0 / 180.0 * Pi) * sqrt(pow(eyez, 2) + pow(eyey, 2));
-        eyez = cos(10.0 / 180.0 * Pi) * sqrt(pow(eyez, 2) + pow(eyey, 2));
+        //eyey -= 0.01;
+        eyez = cos(10) * eyez;
     }
     else if(key == 'e') {
         eyey += 0.01;
         eyez -= 0.01;
     }
-    gluLookAt (eyex, eyey, eyez, centerx, centery, centerz, upx, upy, upz);
 }
 
 void GetInputMouse(int button, int state, int x, int y) {
@@ -169,7 +166,6 @@ int main(int argc, char* argv[]) {
     //
     glutMouseFunc(GetInputMouse);
 
-    radius = eyez;
     glEnable(GL_DEPTH_TEST);
     glClearColor(0.0f, 0.0f, 0.0f, 0.8f);
     glutMainLoop();

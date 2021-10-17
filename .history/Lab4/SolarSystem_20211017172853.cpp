@@ -118,14 +118,13 @@ void GetInputKey(unsigned char key, int x, int y) {
     else if(key == 'd')
         centerx += 2;
     else if(key == 'q') {
-        eyey = sin(10.0 / 180.0 * Pi) * sqrt(pow(eyez, 2) + pow(eyey, 2));
-        eyez = cos(10.0 / 180.0 * Pi) * sqrt(pow(eyez, 2) + pow(eyey, 2));
+        eyey = sin(10.0 / 180.0 * Pi) * eyez;
+        eyez = cos(10.0 / 180.0 * Pi) * sqrt(pow(eyez, 2) + sqrt(eyey, 2));
     }
     else if(key == 'e') {
         eyey += 0.01;
         eyez -= 0.01;
     }
-    gluLookAt (eyex, eyey, eyez, centerx, centery, centerz, upx, upy, upz);
 }
 
 void GetInputMouse(int button, int state, int x, int y) {
