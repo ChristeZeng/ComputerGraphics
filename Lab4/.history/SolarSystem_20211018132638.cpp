@@ -71,9 +71,7 @@ void DisplayMercury() {
 void DisplayEarthAndMoon() {
     glPushMatrix();
     glColor3f(0.0f, 0.0f, 1.0f);
-    glRotatef(ViewX, 1, 0, 0);
-    glRotatef(ViewY, 0, 1, 0);
-
+    
     glRotatef(fEarth, rx, ry, rz);       //gong
     glutSolidTorus(0.01, 6.0f, 64, 100);
     glTranslatef(6.0f, 0.0f, 0.0f);
@@ -127,10 +125,8 @@ void GetInputKey(unsigned char key, int x, int y) {
         centerx -= 2;
     else if(key == 'd')
         centerx += 2;
-
+        
     gluLookAt (eyex, eyey, eyez, centerx, centery, centerz, upx, upy, upz);
-    glutPostRedisplay();
-
 }
 
 void GetInputMouse(int button, int state, int x, int y) {

@@ -22,10 +22,6 @@ GLfloat rx = 0.0, ry = 1, rz = 0.1;
 
 /*鼠标宏定义*/
 bool isLeftMousePress;
-float MouseX;
-float MouseY;
-float ViewX;
-float ViewY;
 
 void Reshape(int width, int height) {
     //修改视口
@@ -71,9 +67,7 @@ void DisplayMercury() {
 void DisplayEarthAndMoon() {
     glPushMatrix();
     glColor3f(0.0f, 0.0f, 1.0f);
-    glRotatef(ViewX, 1, 0, 0);
-    glRotatef(ViewY, 0, 1, 0);
-
+    
     glRotatef(fEarth, rx, ry, rz);       //gong
     glutSolidTorus(0.01, 6.0f, 64, 100);
     glTranslatef(6.0f, 0.0f, 0.0f);
@@ -127,10 +121,15 @@ void GetInputKey(unsigned char key, int x, int y) {
         centerx -= 2;
     else if(key == 'd')
         centerx += 2;
-
+    else if(key == 'q') {
+        eyey = sin(10.0 / 180.0 * Pi) * sqrt(pow(eyez, 2) + pow(eyey, 2));
+        eyez = cos(10.0 / 180.0 * Pi) * sqrt(pow(eyez, 2) + pow(eyey, 2));
+    }
+    else if(key == 'e') {
+        eyey += 0.01;
+        eyez -= 0.01;
+    }
     gluLookAt (eyex, eyey, eyez, centerx, centery, centerz, upx, upy, upz);
-    glutPostRedisplay();
-
 }
 
 void GetInputMouse(int button, int state, int x, int y) {
@@ -142,20 +141,6 @@ void GetInputMouse(int button, int state, int x, int y) {
             isLeftMousePress = false;
     }
 
-    MouseX = x;
-    MouseY = y;
-}
-
-void GetMotionMouse(int x, int y) {
-    ViewX = ViewY = 0;
-    if(isLeftMousePress) {
-        ViewX += (x - MouseX) * 0.1f;
-        ViewY += (y - MouseY) * 0.1f;
-        MouseX = x;
-        MouseY = y;
-    }
-
-    glutPostRedisplay();
 }
 
 int main(int argc, char* argv[]) {
@@ -180,9 +165,8 @@ int main(int argc, char* argv[]) {
     glutKeyboardFunc(GetInputKey);
     //
     glutMouseFunc(GetInputMouse);
-    //
-    glutMotionFunc(GetMotionMouse);
 
+    radius = eyez;
     glEnable(GL_DEPTH_TEST);
     glClearColor(0.0f, 0.0f, 0.0f, 0.8f);
     glutMainLoop();
