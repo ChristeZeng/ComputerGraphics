@@ -20,7 +20,6 @@ GLdouble radius;
 /*gongzhuan*/
 GLfloat rx = 0.0, ry = 1, rz = 0.1;
 
-/**/
 void Reshape(int width, int height) {
     //修改视口
     glViewport(0, 0, width, height);

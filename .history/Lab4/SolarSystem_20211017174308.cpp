@@ -20,7 +20,6 @@ GLdouble radius;
 /*gongzhuan*/
 GLfloat rx = 0.0, ry = 1, rz = 0.1;
 
-/**/
 void Reshape(int width, int height) {
     //修改视口
     glViewport(0, 0, width, height);
@@ -65,9 +64,8 @@ void DisplayMercury() {
 void DisplayEarthAndMoon() {
     glPushMatrix();
     glColor3f(0.0f, 0.0f, 1.0f);
-    
+    glutSolidTorus(0.01, 0.8f, 64, 100);
     glRotatef(fEarth, rx, ry, rz);       //gong
-    glutSolidTorus(0.01, 6.0f, 64, 100);
     glTranslatef(6.0f, 0.0f, 0.0f);
     glPushMatrix();
     glRotatef(Day, 0.0, 1.0, 0.0);       //zizhuan
