@@ -55,9 +55,7 @@ void DisplaySun() {
     glRotatef(ViewY, 0, 1, 0);
 
     glRotatef(90, 1.0, 0.0, 0.0);
-    glutSolidTorus(0.01, 7.0, 64, 100);
-    glRotatef(-90, 1.0, 0.0, 0.0);
-    glutSolidTorus(0.01, 7.0, 64, 100);
+    glutSolidTorus(0.01, 8.0, 64, 100);
     glTranslatef(0.0f, 0.0f, 0.0f);
     glRotatef(0, 0.0, 1.0, 0.0);
     glutSolidSphere(1.5f, 20, 20);
@@ -164,10 +162,10 @@ void GetInputMouse(int button, int state, int x, int y) {
 }
 
 void GetMotionMouse(int x, int y) {
-    //ViewX = ViewY = 0;
+    ViewX = ViewY = 0;
     if(isLeftMousePress) {
-        ViewX += (y - MouseY) * 0.5f;
-        ViewY += (x - MouseX) * 0.5f;
+        ViewX += (x - MouseX) * 0.5f;
+        ViewY += (y - MouseY) * 0.5f;
         MouseX = x;
         MouseY = y;
     }

@@ -166,8 +166,8 @@ void GetInputMouse(int button, int state, int x, int y) {
 void GetMotionMouse(int x, int y) {
     //ViewX = ViewY = 0;
     if(isLeftMousePress) {
-        ViewX += (y - MouseY) * 0.5f;
-        ViewY += (x - MouseX) * 0.5f;
+        ViewX += (x - MouseX) * 0.5f;
+        ViewY += (y - MouseY) * 0.5f;
         MouseX = x;
         MouseY = y;
     }

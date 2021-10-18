@@ -54,10 +54,6 @@ void DisplaySun() {
     glRotatef(ViewX, 1, 0, 0);
     glRotatef(ViewY, 0, 1, 0);
 
-    glRotatef(90, 1.0, 0.0, 0.0);
-    glutSolidTorus(0.01, 7.0, 64, 100);
-    glRotatef(-90, 1.0, 0.0, 0.0);
-    glutSolidTorus(0.01, 7.0, 64, 100);
     glTranslatef(0.0f, 0.0f, 0.0f);
     glRotatef(0, 0.0, 1.0, 0.0);
     glutSolidSphere(1.5f, 20, 20);
@@ -70,12 +66,10 @@ void DisplayMercury() {
     glRotatef(ViewX, 1, 0, 0);
     glRotatef(ViewY, 0, 1, 0);
 
-    
-    glRotatef(fMerrcury, rx, ry, rz + 1.0);   
-    
+    glRotatef(fMerrcury, rx, ry, rz + 0.5);   
     glTranslatef(3.0f, 0.0f, 0.0f);
+    glRotatef(Day, 0.0, 1.0, 0.0);
     glutSolidSphere(1.0f, 20, 20);
-    glutSolidTorus(0.01, 1.1, 64, 100);
     glPopMatrix();
 }
 
@@ -85,10 +79,8 @@ void DisplayEarthAndMoon() {
     glRotatef(ViewX, 1, 0, 0);
     glRotatef(ViewY, 0, 1, 0);
 
-    
     glRotatef(fEarth, rx, ry, rz);       //gong
     glTranslatef(6.0f, 0.0f, 0.0f);
-    
 
     glPushMatrix();
     glRotatef(Day, 0.0, 1.0, 0.0);       //zizhuan
@@ -116,7 +108,7 @@ void Display() {
     DisplaySun();
     DisplayEarthAndMoon();
     DisplayMercury();
-    
+
     glFlush();
     glutSwapBuffers();
 
@@ -164,10 +156,10 @@ void GetInputMouse(int button, int state, int x, int y) {
 }
 
 void GetMotionMouse(int x, int y) {
-    //ViewX = ViewY = 0;
+    ViewX = ViewY = 0;
     if(isLeftMousePress) {
-        ViewX += (y - MouseY) * 0.5f;
-        ViewY += (x - MouseX) * 0.5f;
+        ViewX += (x - MouseX) * 0.5f;
+        ViewY += (y - MouseY) * 0.5f;
         MouseX = x;
         MouseY = y;
     }
