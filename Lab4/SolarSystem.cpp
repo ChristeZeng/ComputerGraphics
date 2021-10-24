@@ -17,7 +17,7 @@ GLfloat Day;
 GLfloat EarthYear;
 
 /*Lookat函数参数*/
-GLdouble eyex, eyey, eyez = 10;
+GLdouble eyex, eyey, eyez = 12;
 GLdouble centerx, centery, centerz;
 GLdouble upx, upy = 1, upz;
 GLdouble radius;
@@ -68,7 +68,7 @@ void DisplayMercury() {
     glColor3f(0.0f, 1.0f, 0.0f);
     
     glRotatef(atan(ry / (rz + 1.0)) * 180 / Pi, -1.0, 0.0, 0.0);
-    glutSolidTorus(0.01, 3.0, 64, 100);
+    glutSolidTorus(0.01, 3.0, 100, 100);
     glRotatef(-atan(ry / (rz + 1.0))* 180 / Pi, -1.0, 0.0, 0.0);
 
     glRotatef(fMerrcury, rx, ry, rz + 1.0);   
@@ -83,7 +83,7 @@ void DisplayEarthAndMoon() {
     /*画地球*/
     //画星轨
     glRotatef(atan(ry / rz) * 180 / Pi, -1.0, 0.0, 0.0);
-    glutSolidTorus(0.01, 6.0, 64, 100);
+    glutSolidTorus(0.01, 6.0, 100, 100);
     glRotatef(-atan(ry / rz)* 180 / Pi, -1.0, 0.0, 0.0);
     //公转
     glRotatef(fEarth, rx, ry, rz);      
@@ -98,7 +98,7 @@ void DisplayEarthAndMoon() {
     glColor3f(1.0f, 1.0f, 0.0f);
     //画星规
     glRotatef(atan(1.0 / 0.3) * 180 / Pi, -1.0, 0.0, 0.0);
-    glutSolidTorus(0.01, 1.5, 64, 100);
+    glutSolidTorus(0.01, 1.5, 100, 100);
     glRotatef(-atan(1.0 / 0.3)* 180 / Pi, -1.0, 0.0, 0.0);
 
     glRotatef(fMoon, 0.0, 1.0, 0.3);
@@ -117,7 +117,7 @@ void DisplayMars() {
     /*画*/
     //画星轨
     glRotatef(atan(ry / (rz + 0.5)) * 180 / Pi, -1.0, 0.0, 0.0);
-    glutSolidTorus(0.01, 5.0, 64, 100);
+    glutSolidTorus(0.01, 5.0, 100, 100);
     glRotatef(-atan(ry / (rz + 0.5))* 180 / Pi, -1.0, 0.0, 0.0);
     //公转
     glRotatef(fMars, rx, ry, rz + 0.5);      
@@ -133,7 +133,7 @@ void DisplayMars() {
     glColor3f(0.5f, 0.0f, 0.5f);
     //画星规
     glRotatef(atan(1.0 / 0.3) * 180 / Pi, -1.0, 0.0, 0.0);
-    glutSolidTorus(0.01, 1.5, 64, 100);
+    glutSolidTorus(0.01, 1.5, 100, 100);
     glRotatef(-atan(1.0 / 0.3)* 180 / Pi, -1.0, 0.0, 0.0);
     glRotatef(fMarsSate1, 0.0, 1.0, 0.3);
     glTranslatef(1.5f, 0.0f, 0.0f);
@@ -143,7 +143,7 @@ void DisplayMars() {
 
     glColor3f(0.5f, 0.5f, 0.0f);
     glRotatef(atan(1.0 / 1.0) * 180 / Pi, -1.0, 0.0, 0.0);
-    glutSolidTorus(0.01, 0.7, 64, 100);
+    glutSolidTorus(0.01, 0.7, 100, 100);
     glRotatef(-atan(1.0 / 1.0)* 180 / Pi, -1.0, 0.0, 0.0);
     glRotatef(fMarsSate2, 0.0, 1.0, 1.0);
     glTranslatef(0.7f, 0.0f, 0.0f);
@@ -154,30 +154,35 @@ void DisplayMars() {
 }
 
 void Display() {
+    //清理缓冲区
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    //设置完成后切换到模型视图矩阵开始画图
     glMatrixMode(GL_MODELVIEW);
+    //重新设置LookAt函数
     glLoadIdentity();
     gluLookAt (eyex, eyey, eyez, centerx, centery, centerz, upx, upy, upz);
-
+    //绘制各星球
     DisplaySun();
     DisplayEarthAndMoon();
     DisplayMercury();
     DisplayMars();
-
+    //刷新与交换缓冲区
     glFlush();
     glutSwapBuffers();
-
 }
 
 void Idle() {
+    //设置自转速度
     Day += 1.0;
     Day = Day >= 360 ? (Day - 360) : Day; 
+    //设置公转速度
     fEarth = fEarth >= 360 ? (fEarth - 360) : (fEarth + 0.3f);
     fMoon  = fMoon  >= 360 ? (fMoon - 360) : (fMoon  + 2.4f);
     fMerrcury  = fMerrcury  >= 360 ? (fMerrcury - 360) : (fMerrcury + 0.4f);
     fMars  = fMars  >= 360 ? (fMars - 360) : (fMars  + 0.5f);
     fMarsSate1  = fMarsSate1  >= 360 ? (fMarsSate1 - 360) : (fMarsSate1  + 3.0f);
     fMarsSate2  = fMarsSate2  >= 360 ? (fMarsSate2 - 360) : (fMarsSate2  + 2.8f);
+    //重新显示
     Display();
 }
 
@@ -190,21 +195,6 @@ void GetInputKey(unsigned char key, int x, int y) {
         centerx -= 2;
     else if(key == 'd')
         centerx += 2;
-    // else if(key == 'q')
-    //     ViewX += 0.01f;
-    // else if(key == 'e')
-    //     ViewX -= 0.01f;
-
-    // printf("%f\n", ViewX * 180 / Pi);
-    // printf("%f %f %f\n", eyex, eyey, eyez);
-    // float distance = sqrt(pow(eyex, 2) + pow(eyey, 2) + pow(eyez, 2));
-    // eyez = distance * cos(ViewX) * cos(ViewY);
-    // eyex = distance * cos(ViewX) * sin(ViewY);
-    // eyey = distance * sin(ViewX);
-    // glutPostRedisplay();
-    // gluLookAt (eyex, eyey, eyez, centerx, centery, centerz, upx, upy, upz);
-    // glutPostRedisplay();
-
 }
 
 void GetInputMouse(int button, int state, int x, int y) {
@@ -223,8 +213,8 @@ void GetInputMouse(int button, int state, int x, int y) {
 void GetMotionMouse(int x, int y) {
     
     if(isLeftMousePress) {
-        ViewX += (y - MouseY) * 0.1f;
-        ViewY += (x - MouseX) * 0.1f;
+        ViewX += (y - MouseY) * 0.02f;
+        ViewY += (x - MouseX) * 0.02f;
         MouseX = x;
         MouseY = y;
     }
