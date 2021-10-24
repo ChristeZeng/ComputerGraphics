@@ -190,20 +190,20 @@ void GetInputKey(unsigned char key, int x, int y) {
         centerx -= 2;
     else if(key == 'd')
         centerx += 2;
-    // else if(key == 'q')
-    //     ViewX += 0.01f;
-    // else if(key == 'e')
-    //     ViewX -= 0.01f;
+    else if(key == 'q')
+        ViewX += 0.01f;
+    else if(key == 'e')
+        ViewX -= 0.01f;
 
-    // printf("%f\n", ViewX * 180 / Pi);
-    // printf("%f %f %f\n", eyex, eyey, eyez);
-    // float distance = sqrt(pow(eyex, 2) + pow(eyey, 2) + pow(eyez, 2));
-    // eyez = distance * cos(ViewX) * cos(ViewY);
-    // eyex = distance * cos(ViewX) * sin(ViewY);
-    // eyey = distance * sin(ViewX);
-    // glutPostRedisplay();
-    // gluLookAt (eyex, eyey, eyez, centerx, centery, centerz, upx, upy, upz);
-    // glutPostRedisplay();
+    printf("%f\n", ViewX * 180 / Pi);
+    printf("%f %f %f\n", eyex, eyey, eyez);
+    float distance = sqrt(pow(eyex, 2) + pow(eyey, 2) + pow(eyez, 2));
+    eyez = distance * cos(ViewX) * cos(ViewY);
+    eyex = distance * cos(ViewX) * sin(ViewY);
+    eyey = distance * sin(ViewX);
+    glutPostRedisplay();
+    gluLookAt (eyex, eyey, eyez, centerx, centery, centerz, upx, upy, upz);
+    glutPostRedisplay();
 
 }
 
@@ -230,9 +230,9 @@ void GetMotionMouse(int x, int y) {
     }
 
     float distance = sqrt(pow(eyex, 2) + pow(eyey, 2) + pow(eyez, 2));
-    eyez = distance * cos(ViewX) * cos(ViewY);
-    eyex = distance * cos(ViewX) * sin(ViewY);
-    eyey = distance * sin(ViewX);
+    eyez = distance * sin(ViewX) * cos(ViewY);
+    eyex = distance * sin(ViewX) * sin(ViewY);
+    eyey = distance * cos(ViewX);
     glutPostRedisplay();
 }
 
@@ -254,13 +254,13 @@ int main(int argc, char* argv[]) {
     glutDisplayFunc(Display);
     //设置空闲时期执行函数
     glutIdleFunc(&Idle);
-    //处理键盘输入
+    //
     glutKeyboardFunc(GetInputKey);
-    //处理鼠标点击
+    //
     glutMouseFunc(GetInputMouse);
-    //处理鼠标移动
+    //
     glutMotionFunc(GetMotionMouse);
-    //启用深度测试
+
     glEnable(GL_DEPTH_TEST);
     glClearColor(0.0f, 0.0f, 0.0f, 0.8f);
     glutMainLoop();

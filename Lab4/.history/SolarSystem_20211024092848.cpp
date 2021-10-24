@@ -8,9 +8,6 @@ GLfloat fEarth        = 2.0f;
 GLfloat fMoon         = 24.0f;
 GLfloat fSun          = 2.0f;
 GLfloat fMerrcury     = 5.0f;
-GLfloat fMars         = 6.0f;
-GLfloat fMarsSate1    = 20.0f;
-GLfloat fMarsSate2    = 0.0f;
 
 /*星球的自传*/
 GLfloat Day;
@@ -29,8 +26,8 @@ GLfloat rx = 0.0, ry = 1, rz = 0.1;
 bool isLeftMousePress;
 float MouseX;
 float MouseY;
-float ViewX = 0;
-float ViewY = 0;
+float ViewX;
+float ViewY;
 
 void Reshape(int width, int height) {
     //修改视口
@@ -46,7 +43,7 @@ void Reshape(int width, int height) {
     //重置当前指定的矩阵为单位矩阵
     glLoadIdentity();
     //gluPerspective定义的就是相机的内在镜头参数
-    gluPerspective(60.0f, (float)width / (float)height, 0.1f, 1000.0f);
+    gluPerspective(60.0f, (float)width / (float)height, 0.1f, 100.0f);
     //设置完成后切换到模型视图矩阵开始画图
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
@@ -57,6 +54,10 @@ void DisplaySun() {
     glPushMatrix();
     glColor3f(1.0f, 0.0f, 0.0f);
 
+    // glRotatef(90, 1.0, 0.0, 0.0);
+    // glutSolidTorus(0.01, 7.0, 64, 100);
+    // glRotatef(-90, 1.0, 0.0, 0.0);
+    glutSolidTorus(0.01, 7.0, 64, 100);
     glTranslatef(0.0f, 0.0f, 0.0f);
     glRotatef(0, 0.0, 1.0, 0.0);
     glutSolidSphere(1.5f, 20, 20);
@@ -80,27 +81,20 @@ void DisplayMercury() {
 void DisplayEarthAndMoon() {
     glPushMatrix();
     glColor3f(0.0f, 0.0f, 1.0f);
-    /*画地球*/
-    //画星轨
-    glRotatef(atan(ry / rz) * 180 / Pi, -1.0, 0.0, 0.0);
-    glutSolidTorus(0.01, 6.0, 64, 100);
-    glRotatef(-atan(ry / rz)* 180 / Pi, -1.0, 0.0, 0.0);
-    //公转
-    glRotatef(fEarth, rx, ry, rz);      
+    // glRotatef(ViewX, 1, 0, 0);
+    // glRotatef(ViewY, 0, 1, 0);
+
+    
+    glRotatef(fEarth, rx, ry, rz);       //gong
     glTranslatef(6.0f, 0.0f, 0.0f);
-    //自转
+    
+
     glPushMatrix();
     glRotatef(Day, 0.0, 1.0, 0.0);       //zizhuan
     glutSolidSphere(0.8f, 20, 20);
     glPopMatrix();
 
-    /*画月球*/
     glColor3f(1.0f, 1.0f, 0.0f);
-    //画星规
-    glRotatef(atan(1.0 / 0.3) * 180 / Pi, -1.0, 0.0, 0.0);
-    glutSolidTorus(0.01, 1.5, 64, 100);
-    glRotatef(-atan(1.0 / 0.3)* 180 / Pi, -1.0, 0.0, 0.0);
-
     glRotatef(fMoon, 0.0, 1.0, 0.3);
     glTranslatef(1.5f, 0.0f, 0.0f);
     glRotatef(Day, 0.0f, 1.0f, 0.0f);
@@ -111,47 +105,6 @@ void DisplayEarthAndMoon() {
     glPopMatrix();
 }
 
-void DisplayMars() {
-    glPushMatrix();
-    glColor3f(1.0f, 0.647f, 0.0f);
-    /*画*/
-    //画星轨
-    glRotatef(atan(ry / (rz + 0.5)) * 180 / Pi, -1.0, 0.0, 0.0);
-    glutSolidTorus(0.01, 5.0, 64, 100);
-    glRotatef(-atan(ry / (rz + 0.5))* 180 / Pi, -1.0, 0.0, 0.0);
-    //公转
-    glRotatef(fMars, rx, ry, rz + 0.5);      
-    glTranslatef(5.0f, 0.0f, 0.0f);
-    //自转
-    glPushMatrix();
-    glRotatef(Day, 0.0, 1.0, 0.0);       //zizhuan
-    glutSolidSphere(0.6f, 20, 20);
-    glPopMatrix();
-
-    glPushMatrix();
-    /*画月球*/
-    glColor3f(0.5f, 0.0f, 0.5f);
-    //画星规
-    glRotatef(atan(1.0 / 0.3) * 180 / Pi, -1.0, 0.0, 0.0);
-    glutSolidTorus(0.01, 1.5, 64, 100);
-    glRotatef(-atan(1.0 / 0.3)* 180 / Pi, -1.0, 0.0, 0.0);
-    glRotatef(fMarsSate1, 0.0, 1.0, 0.3);
-    glTranslatef(1.5f, 0.0f, 0.0f);
-    glRotatef(Day, 0.0f, 1.0f, 0.0f);
-    glutSolidSphere(0.2f, 20, 20);
-    glPopMatrix();
-
-    glColor3f(0.5f, 0.5f, 0.0f);
-    glRotatef(atan(1.0 / 1.0) * 180 / Pi, -1.0, 0.0, 0.0);
-    glutSolidTorus(0.01, 0.7, 64, 100);
-    glRotatef(-atan(1.0 / 1.0)* 180 / Pi, -1.0, 0.0, 0.0);
-    glRotatef(fMarsSate2, 0.0, 1.0, 1.0);
-    glTranslatef(0.7f, 0.0f, 0.0f);
-    glRotatef(Day, 0.0f, 1.0f, 0.0f);
-    glutSolidSphere(0.15f, 20, 20);
-
-    glPopMatrix();
-}
 
 void Display() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -162,8 +115,7 @@ void Display() {
     DisplaySun();
     DisplayEarthAndMoon();
     DisplayMercury();
-    DisplayMars();
-
+    
     glFlush();
     glutSwapBuffers();
 
@@ -174,10 +126,7 @@ void Idle() {
     Day = Day >= 360 ? (Day - 360) : Day; 
     fEarth = fEarth >= 360 ? (fEarth - 360) : (fEarth + 0.3f);
     fMoon  = fMoon  >= 360 ? (fMoon - 360) : (fMoon  + 2.4f);
-    fMerrcury  = fMerrcury  >= 360 ? (fMerrcury - 360) : (fMerrcury + 0.4f);
-    fMars  = fMars  >= 360 ? (fMars - 360) : (fMars  + 0.5f);
-    fMarsSate1  = fMarsSate1  >= 360 ? (fMarsSate1 - 360) : (fMarsSate1  + 3.0f);
-    fMarsSate2  = fMarsSate2  >= 360 ? (fMarsSate2 - 360) : (fMarsSate2  + 2.8f);
+    fMerrcury  = fMerrcury  >= 360 ? (fMerrcury - 360) : (fMoon  + 2.4f);
     Display();
 }
 
@@ -190,20 +139,9 @@ void GetInputKey(unsigned char key, int x, int y) {
         centerx -= 2;
     else if(key == 'd')
         centerx += 2;
-    // else if(key == 'q')
-    //     ViewX += 0.01f;
-    // else if(key == 'e')
-    //     ViewX -= 0.01f;
 
-    // printf("%f\n", ViewX * 180 / Pi);
-    // printf("%f %f %f\n", eyex, eyey, eyez);
-    // float distance = sqrt(pow(eyex, 2) + pow(eyey, 2) + pow(eyez, 2));
-    // eyez = distance * cos(ViewX) * cos(ViewY);
-    // eyex = distance * cos(ViewX) * sin(ViewY);
-    // eyey = distance * sin(ViewX);
-    // glutPostRedisplay();
-    // gluLookAt (eyex, eyey, eyez, centerx, centery, centerz, upx, upy, upz);
-    // glutPostRedisplay();
+    //gluLookAt (eyex, eyey, eyez, centerx, centery, centerz, upx, upy, upz);
+    glutPostRedisplay();
 
 }
 
@@ -221,18 +159,20 @@ void GetInputMouse(int button, int state, int x, int y) {
 }
 
 void GetMotionMouse(int x, int y) {
-    
+    //ViewX = ViewY = 0;
     if(isLeftMousePress) {
-        ViewX += (y - MouseY) * 0.1f;
-        ViewY += (x - MouseX) * 0.1f;
+        ViewX += (y - MouseY) * 0.05f;
+        ViewY += (x - MouseX) * 0.05f;
         MouseX = x;
         MouseY = y;
     }
 
     float distance = sqrt(pow(eyex, 2) + pow(eyey, 2) + pow(eyez, 2));
-    eyez = distance * cos(ViewX) * cos(ViewY);
-    eyex = distance * cos(ViewX) * sin(ViewY);
-    eyey = distance * sin(ViewX);
+    eyex = distance * sin(ViewY) * cos(ViewX);
+    eyey = distance * sin(ViewY) * sin(ViewX);
+    eyez = distance * cos(ViewY);
+    // glLoadIdentity();
+    // gluLookAt (eyex, eyey, eyez, centerx, centery, centerz, upx, upy, upz);
     glutPostRedisplay();
 }
 
@@ -254,13 +194,13 @@ int main(int argc, char* argv[]) {
     glutDisplayFunc(Display);
     //设置空闲时期执行函数
     glutIdleFunc(&Idle);
-    //处理键盘输入
+    //
     glutKeyboardFunc(GetInputKey);
-    //处理鼠标点击
+    //
     glutMouseFunc(GetInputMouse);
-    //处理鼠标移动
+    //
     glutMotionFunc(GetMotionMouse);
-    //启用深度测试
+
     glEnable(GL_DEPTH_TEST);
     glClearColor(0.0f, 0.0f, 0.0f, 0.8f);
     glutMainLoop();

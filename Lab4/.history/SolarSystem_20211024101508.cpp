@@ -29,8 +29,8 @@ GLfloat rx = 0.0, ry = 1, rz = 0.1;
 bool isLeftMousePress;
 float MouseX;
 float MouseY;
-float ViewX = 0;
-float ViewY = 0;
+float ViewX;
+float ViewY;
 
 void Reshape(int width, int height) {
     //修改视口
@@ -116,12 +116,12 @@ void DisplayMars() {
     glColor3f(1.0f, 0.647f, 0.0f);
     /*画*/
     //画星轨
-    glRotatef(atan(ry / (rz + 0.5)) * 180 / Pi, -1.0, 0.0, 0.0);
-    glutSolidTorus(0.01, 5.0, 64, 100);
-    glRotatef(-atan(ry / (rz + 0.5))* 180 / Pi, -1.0, 0.0, 0.0);
+    glRotatef(atan(ry / (rz + 1.5)) * 180 / Pi, -1.0, 0.0, 0.0);
+    glutSolidTorus(0.01, 4.0, 64, 100);
+    glRotatef(-atan(ry / (rz + 1.5))* 180 / Pi, -1.0, 0.0, 0.0);
     //公转
-    glRotatef(fMars, rx, ry, rz + 0.5);      
-    glTranslatef(5.0f, 0.0f, 0.0f);
+    glRotatef(fMars, rx, ry, rz + 1.5);      
+    glTranslatef(4.0f, 0.0f, 0.0f);
     //自转
     glPushMatrix();
     glRotatef(Day, 0.0, 1.0, 0.0);       //zizhuan
@@ -190,20 +190,9 @@ void GetInputKey(unsigned char key, int x, int y) {
         centerx -= 2;
     else if(key == 'd')
         centerx += 2;
-    // else if(key == 'q')
-    //     ViewX += 0.01f;
-    // else if(key == 'e')
-    //     ViewX -= 0.01f;
 
-    // printf("%f\n", ViewX * 180 / Pi);
-    // printf("%f %f %f\n", eyex, eyey, eyez);
-    // float distance = sqrt(pow(eyex, 2) + pow(eyey, 2) + pow(eyez, 2));
-    // eyez = distance * cos(ViewX) * cos(ViewY);
-    // eyex = distance * cos(ViewX) * sin(ViewY);
-    // eyey = distance * sin(ViewX);
-    // glutPostRedisplay();
-    // gluLookAt (eyex, eyey, eyez, centerx, centery, centerz, upx, upy, upz);
-    // glutPostRedisplay();
+    //gluLookAt (eyex, eyey, eyez, centerx, centery, centerz, upx, upy, upz);
+    glutPostRedisplay();
 
 }
 
@@ -230,9 +219,9 @@ void GetMotionMouse(int x, int y) {
     }
 
     float distance = sqrt(pow(eyex, 2) + pow(eyey, 2) + pow(eyez, 2));
-    eyez = distance * cos(ViewX) * cos(ViewY);
-    eyex = distance * cos(ViewX) * sin(ViewY);
-    eyey = distance * sin(ViewX);
+    eyez = distance * sin(ViewX) * cos(ViewY);
+    eyex = distance * sin(ViewX) * sin(ViewY);
+    eyey = distance * cos(ViewX);
     glutPostRedisplay();
 }
 
@@ -254,13 +243,13 @@ int main(int argc, char* argv[]) {
     glutDisplayFunc(Display);
     //设置空闲时期执行函数
     glutIdleFunc(&Idle);
-    //处理键盘输入
+    //
     glutKeyboardFunc(GetInputKey);
-    //处理鼠标点击
+    //
     glutMouseFunc(GetInputMouse);
-    //处理鼠标移动
+    //
     glutMotionFunc(GetMotionMouse);
-    //启用深度测试
+
     glEnable(GL_DEPTH_TEST);
     glClearColor(0.0f, 0.0f, 0.0f, 0.8f);
     glutMainLoop();

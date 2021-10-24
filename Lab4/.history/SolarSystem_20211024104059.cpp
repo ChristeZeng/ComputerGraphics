@@ -29,7 +29,7 @@ GLfloat rx = 0.0, ry = 1, rz = 0.1;
 bool isLeftMousePress;
 float MouseX;
 float MouseY;
-float ViewX = 0;
+float ViewX = Pi / 2;
 float ViewY = 0;
 
 void Reshape(int width, int height) {
@@ -170,14 +170,14 @@ void Display() {
 }
 
 void Idle() {
-    Day += 1.0;
-    Day = Day >= 360 ? (Day - 360) : Day; 
-    fEarth = fEarth >= 360 ? (fEarth - 360) : (fEarth + 0.3f);
-    fMoon  = fMoon  >= 360 ? (fMoon - 360) : (fMoon  + 2.4f);
-    fMerrcury  = fMerrcury  >= 360 ? (fMerrcury - 360) : (fMerrcury + 0.4f);
-    fMars  = fMars  >= 360 ? (fMars - 360) : (fMars  + 0.5f);
-    fMarsSate1  = fMarsSate1  >= 360 ? (fMarsSate1 - 360) : (fMarsSate1  + 3.0f);
-    fMarsSate2  = fMarsSate2  >= 360 ? (fMarsSate2 - 360) : (fMarsSate2  + 2.8f);
+    // Day += 1.0;
+    // Day = Day >= 360 ? (Day - 360) : Day; 
+    // fEarth = fEarth >= 360 ? (fEarth - 360) : (fEarth + 0.3f);
+    // fMoon  = fMoon  >= 360 ? (fMoon - 360) : (fMoon  + 2.4f);
+    // fMerrcury  = fMerrcury  >= 360 ? (fMerrcury - 360) : (fMerrcury + 0.4f);
+    // fMars  = fMars  >= 360 ? (fMars - 360) : (fMars  + 0.5f);
+    // fMarsSate1  = fMarsSate1  >= 360 ? (fMarsSate1 - 360) : (fMarsSate1  + 3.0f);
+    // fMarsSate2  = fMarsSate2  >= 360 ? (fMarsSate2 - 360) : (fMarsSate2  + 2.8f);
     Display();
 }
 
@@ -190,20 +190,17 @@ void GetInputKey(unsigned char key, int x, int y) {
         centerx -= 2;
     else if(key == 'd')
         centerx += 2;
-    // else if(key == 'q')
-    //     ViewX += 0.01f;
-    // else if(key == 'e')
-    //     ViewX -= 0.01f;
-
-    // printf("%f\n", ViewX * 180 / Pi);
-    // printf("%f %f %f\n", eyex, eyey, eyez);
+    else if(key == 'q')
+        ViewX += 0.001f;
+    else if(key == 'e')
+        ViewX -= 0.001f;
     // float distance = sqrt(pow(eyex, 2) + pow(eyey, 2) + pow(eyez, 2));
-    // eyez = distance * cos(ViewX) * cos(ViewY);
-    // eyex = distance * cos(ViewX) * sin(ViewY);
-    // eyey = distance * sin(ViewX);
-    // glutPostRedisplay();
-    // gluLookAt (eyex, eyey, eyez, centerx, centery, centerz, upx, upy, upz);
-    // glutPostRedisplay();
+    // eyez = distance * sin(ViewX) * cos(ViewY);
+    // eyex = distance * sin(ViewX) * sin(ViewY);
+    // eyey = distance * cos(ViewX);
+    //glutPostRedisplay();
+    //gluLookAt (eyex, eyey, eyez, centerx, centery, centerz, upx, upy, upz);
+    glutPostRedisplay();
 
 }
 
@@ -230,9 +227,9 @@ void GetMotionMouse(int x, int y) {
     }
 
     float distance = sqrt(pow(eyex, 2) + pow(eyey, 2) + pow(eyez, 2));
-    eyez = distance * cos(ViewX) * cos(ViewY);
-    eyex = distance * cos(ViewX) * sin(ViewY);
-    eyey = distance * sin(ViewX);
+    eyez = distance * sin(ViewX) * cos(ViewY);
+    eyex = distance * sin(ViewX) * sin(ViewY);
+    eyey = distance * cos(ViewX);
     glutPostRedisplay();
 }
 
@@ -254,13 +251,13 @@ int main(int argc, char* argv[]) {
     glutDisplayFunc(Display);
     //设置空闲时期执行函数
     glutIdleFunc(&Idle);
-    //处理键盘输入
+    //
     glutKeyboardFunc(GetInputKey);
-    //处理鼠标点击
+    //
     glutMouseFunc(GetInputMouse);
-    //处理鼠标移动
+    //
     glutMotionFunc(GetMotionMouse);
-    //启用深度测试
+
     glEnable(GL_DEPTH_TEST);
     glClearColor(0.0f, 0.0f, 0.0f, 0.8f);
     glutMainLoop();

@@ -190,20 +190,20 @@ void GetInputKey(unsigned char key, int x, int y) {
         centerx -= 2;
     else if(key == 'd')
         centerx += 2;
-    // else if(key == 'q')
-    //     ViewX += 0.01f;
-    // else if(key == 'e')
-    //     ViewX -= 0.01f;
+    else if(key == 'q')
+        ViewX += 0.01f;
+    else if(key == 'e')
+        ViewX -= 0.01f;
 
-    // printf("%f\n", ViewX * 180 / Pi);
-    // printf("%f %f %f\n", eyex, eyey, eyez);
-    // float distance = sqrt(pow(eyex, 2) + pow(eyey, 2) + pow(eyez, 2));
-    // eyez = distance * cos(ViewX) * cos(ViewY);
-    // eyex = distance * cos(ViewX) * sin(ViewY);
-    // eyey = distance * sin(ViewX);
-    // glutPostRedisplay();
-    // gluLookAt (eyex, eyey, eyez, centerx, centery, centerz, upx, upy, upz);
-    // glutPostRedisplay();
+    printf("%f\n", ViewX * 180 / Pi);
+    printf("%f %f %f\n", eyex, eyey, eyez);
+    float distance = sqrt(pow(eyex, 2) + pow(eyey, 2) + pow(eyez, 2));
+    eyez = distance * cos(ViewX) * cos(ViewY);
+    eyex = distance * cos(ViewX) * sin(ViewY);
+    eyey = distance * sin(ViewX);
+    glutPostRedisplay();
+    gluLookAt (eyex, eyey, eyez, centerx, centery, centerz, upx, upy, upz);
+    glutPostRedisplay();
 
 }
 
