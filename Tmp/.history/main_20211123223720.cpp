@@ -43,7 +43,7 @@ void display()
     gluLookAt(r*cos(c*degree), 0, r*sin(c*degree), 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
 
 
-    objModel.DrawOBJ();//绘制obj模型
+    objModel.Draw();//绘制obj模型
     glPopMatrix();
     glutSwapBuffers();
 }
