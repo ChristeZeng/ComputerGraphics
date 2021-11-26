@@ -9,8 +9,7 @@
 using namespace std;
 
 //1.331094
-#define PI 3.1415926535897932384626433832795
-float HLength = 0.2;
+float HLength = 1.0;
 float HWidth = 0.5;
 float HThickness = 0.2;
 
@@ -56,62 +55,79 @@ public:
 		}
         fclose(fp);
 	}
-    
+    /*
+    # Technique 3: L-system
+    def drawArm(f, armStructure):
+    x = 0
+    y = 0
+    z = boardHeight_up + boardThickness_up
+    angle = 0
+    for i in armStructure:
+        if i == 'S':
+            pass
+        elif i == 'L':
+            angle = angle + pi / 3
+        elif i == 'R':
+            angle = angle - pi / 3
+        drawH(f, x, y, z, x, y + HLength * sin(angle), z + HLength * cos(angle))
+        y = y + HLength * sin(angle)
+        z = z + HLength * cos(angle)
+    */
     void LSystem(string cmd){
         glPushMatrix();
         for(int i = 0; i < cmd.length(); i++){
             if(cmd[i] == 'S'){
                 glTranslatef(0.055895, 0.798012, -1.227384);
                 glRotatef(-90, 1, 0, 0);
-                gluCylinder(gluNewQuadric(), 0.01, 0.01, 0.1, 20, 20);
-                glTranslatef(0.0, 0.0, 0.1);
+                gluCylinder(gluNewQuadric(), 0.06, 0.06, 1.0, 20, 20);
+                glTranslatef(0.0, 0.0, 1.0);
             }
             else if(cmd[i] == 'L'){
                 glRotatef(30, 0, 1, 0);
-                gluCylinder(gluNewQuadric(), 0.01, 0.01, 0.1, 20, 20);
+                gluCylinder(gluNewQuadric(), 0.06, 0.06, 1.0, 20, 20);
             }
             else if(cmd[i] == 'R'){
                 glRotatef(-30, 0, 1, 0);
-                gluCylinder(gluNewQuadric(), 0.01, 0.01, 0.1, 20, 20);
+                gluCylinder(gluNewQuadric(), 0.06, 0.06, 1.0, 20, 20);
             }
         }
         glPopMatrix();
     }
     
-    void Sweeping(float radius, float bendRadius) {
-        glPushMatrix();
-        glRotatef(-180, 0, 1, 0);
-        glTranslatef(0.069733, 0.890669, 1.134200 - 3.0);
-        
-        GLfloat w0, w1, ang0, ang1, angle, x, y, xb, yb, zb;
- 
-        int slices = 8;
-        //GLfloat bend_radius = 1.0f;
-        //GLfloat radius = 0.1f;
-        GLfloat bend_angle, bend_ang0, bend_ang1; 
- 
-        bend_angle = bendRadius * 1.0f;
-        bend_ang0  = -bend_angle/2.0f;
-        bend_ang1  = bend_angle/2.0f;
- 
-        for(int i = 0; i < 8; i++) {
-            float w0 = (float)i / 8.0;
-            float w1 = (float)(i+1) / 8.0;
-        
-            ang0 = bend_ang0 + (bend_ang1-bend_ang0) * w0;
-            ang1 = bend_ang0 + (bend_ang1-bend_ang0) * w1;
+    void drawH(float x, float y, float z, float x1, float y1, float z1){
+        int lastofVertices = vertices.size();
+        vertices.push_back(vec3{x - HWidth / 2, y - HThickness / 2, z});
+        vertices.push_back(vec3{x - HWidth / 2, y + HThickness / 2, z});
+        vertices.push_back(vec3{x1 - HWidth / 2, y1 + HThickness / 2, z1});
+        vertices.push_back(vec3{x1 - HWidth / 2, y1 - HThickness / 2, z1});
+        verticesIndex.push_back(lastofVertices + 0);
+        verticesIndex.push_back(lastofVertices + 1);
+        verticesIndex.push_back(lastofVertices + 2);
+        verticesIndex.push_back(lastofVertices + 0);
+        verticesIndex.push_back(lastofVertices + 2);
+        verticesIndex.push_back(lastofVertices + 3);
 
-            glBegin(GL_QUAD_STRIP);
-            for (int j = 0; j <= 360; j++) {
-                angle = PI * (float)j * PI / 180.0f;
-                x = radius * cos(angle) + bendRadius;
-                y = radius * sin(angle);
-                glVertex3f( x * sin(ang0), y, x * cos(ang0));
-                glVertex3f( x * sin(ang1), y, x * cos(ang1));
-            }
-            glEnd();
-        }
-        glPopMatrix();
+        vertices.push_back(vec3{x + HWidth / 2, y + HThickness / 2, z});
+        vertices.push_back(vec3{x + HWidth / 2, y - HThickness / 2, z});
+        vertices.push_back(vec3{x1 + HWidth / 2, y1 - HThickness / 2, z1});
+        vertices.push_back(vec3{x1 + HWidth / 2, y1 + HThickness / 2, z1});
+        verticesIndex.push_back(lastofVertices + 4);
+        verticesIndex.push_back(lastofVertices + 5);
+        verticesIndex.push_back(lastofVertices + 6);
+        verticesIndex.push_back(lastofVertices + 4);
+        verticesIndex.push_back(lastofVertices + 6);
+        verticesIndex.push_back(lastofVertices + 7);
+
+        vertices.push_back(vec3{(x + x1) / 2 + HWidth / 2, (y + y1) / 2 - HThickness / 2, (z + z1) / 2});
+        vertices.push_back(vec3{(x + x1) / 2 - HWidth / 2, (y + y1) / 2 - HThickness / 2, (z + z1) / 2});
+        vertices.push_back(vec3{(x + x1) / 2 - HWidth / 2, (y + y1) / 2 + HThickness / 2, (z + z1) / 2});
+        vertices.push_back(vec3{(x + x1) / 2 + HWidth / 2, (y + y1) / 2 + HThickness / 2, (z + z1) / 2});
+        verticesIndex.push_back(lastofVertices + 8);
+        verticesIndex.push_back(lastofVertices + 9);
+        verticesIndex.push_back(lastofVertices + 10);
+        verticesIndex.push_back(lastofVertices + 8);
+        verticesIndex.push_back(lastofVertices + 10);
+        verticesIndex.push_back(lastofVertices + 11);
     }
     void DrawOBJ(){
         glPushMatrix();

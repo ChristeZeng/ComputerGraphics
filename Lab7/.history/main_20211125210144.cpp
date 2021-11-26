@@ -168,14 +168,11 @@ void Display() {
     gluLookAt (eyex, eyey, eyez, centerx, centery, centerz, upx, upy, upz);
     //绘制各星球
     //DisplaySun();
-    DisplayEarthAndMoon();
-    DisplayMercury();
-    DisplayMars();
+    // DisplayEarthAndMoon();
+    // DisplayMercury();
+    // DisplayMars();
     OBJLoader objLoader("Car.obj");
-    objLoader.LSystem("SLLRRRR");
-    float radius = 0.1;
-    float bradius = 2.0;
-    objLoader.Sweeping(radius, bradius);
+    objLoader.LSystem("SLL");
     objLoader.DrawOBJ();
     //刷新与交换缓冲区
     glFlush();
@@ -230,8 +227,8 @@ void GetInputMouse(int button, int state, int x, int y) {
 void GetMotionMouse(int x, int y) {
     
     if(isLeftMousePress) {
-        ViewX += (y - MouseY) * 0.1f;//0.00005f;
-        ViewY += (x - MouseX) * 0.1f;//0.00005f;
+        ViewX += (y - MouseY) * 0.00005f;
+        ViewY += (x - MouseX) * 0.00005f;
         MouseX = x;
         MouseY = y;
     }

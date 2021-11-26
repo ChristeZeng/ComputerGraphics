@@ -63,16 +63,16 @@ public:
             if(cmd[i] == 'S'){
                 glTranslatef(0.055895, 0.798012, -1.227384);
                 glRotatef(-90, 1, 0, 0);
-                gluCylinder(gluNewQuadric(), 0.01, 0.01, 0.1, 20, 20);
+                gluCylinder(gluNewQuadric(), 0.03, 0.03, 0.1, 20, 20);
                 glTranslatef(0.0, 0.0, 0.1);
             }
             else if(cmd[i] == 'L'){
                 glRotatef(30, 0, 1, 0);
-                gluCylinder(gluNewQuadric(), 0.01, 0.01, 0.1, 20, 20);
+                gluCylinder(gluNewQuadric(), 0.03, 0.03, 0.1, 20, 20);
             }
             else if(cmd[i] == 'R'){
                 glRotatef(-30, 0, 1, 0);
-                gluCylinder(gluNewQuadric(), 0.01, 0.01, 0.1, 20, 20);
+                gluCylinder(gluNewQuadric(), 0.03, 0.03, 0.05, 20, 20);
             }
         }
         glPopMatrix();
@@ -81,7 +81,7 @@ public:
     void Sweeping(float radius, float bendRadius) {
         glPushMatrix();
         glRotatef(-180, 0, 1, 0);
-        glTranslatef(0.069733, 0.890669, 1.134200 - 3.0);
+        glTranslatef(0.069733, 0.890669, 1.134200 - 1.0);
         
         GLfloat w0, w1, ang0, ang1, angle, x, y, xb, yb, zb;
  

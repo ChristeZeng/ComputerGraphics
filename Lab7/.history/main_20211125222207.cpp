@@ -174,7 +174,7 @@ void Display() {
     OBJLoader objLoader("Car.obj");
     objLoader.LSystem("SLLRRRR");
     float radius = 0.1;
-    float bradius = 2.0;
+    float bradius = 1.0;
     objLoader.Sweeping(radius, bradius);
     objLoader.DrawOBJ();
     //刷新与交换缓冲区

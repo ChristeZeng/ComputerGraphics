@@ -10,7 +10,7 @@ using namespace std;
 
 //1.331094
 #define PI 3.1415926535897932384626433832795
-float HLength = 0.2;
+float HLength = 1.0;
 float HWidth = 0.5;
 float HThickness = 0.2;
 
@@ -63,40 +63,39 @@ public:
             if(cmd[i] == 'S'){
                 glTranslatef(0.055895, 0.798012, -1.227384);
                 glRotatef(-90, 1, 0, 0);
-                gluCylinder(gluNewQuadric(), 0.01, 0.01, 0.1, 20, 20);
-                glTranslatef(0.0, 0.0, 0.1);
+                gluCylinder(gluNewQuadric(), 0.06, 0.06, 1.0, 20, 20);
+                glTranslatef(0.0, 0.0, 1.0);
             }
             else if(cmd[i] == 'L'){
                 glRotatef(30, 0, 1, 0);
-                gluCylinder(gluNewQuadric(), 0.01, 0.01, 0.1, 20, 20);
+                gluCylinder(gluNewQuadric(), 0.06, 0.06, 1.0, 20, 20);
             }
             else if(cmd[i] == 'R'){
                 glRotatef(-30, 0, 1, 0);
-                gluCylinder(gluNewQuadric(), 0.01, 0.01, 0.1, 20, 20);
+                gluCylinder(gluNewQuadric(), 0.06, 0.06, 1.0, 20, 20);
             }
         }
         glPopMatrix();
     }
     
-    void Sweeping(float radius, float bendRadius) {
+    void Sweeping(){
         glPushMatrix();
-        glRotatef(-180, 0, 1, 0);
-        glTranslatef(0.069733, 0.890669, 1.134200 - 3.0);
+        glTranslatef(0.063850, 0.876557, 1.105881);
         
         GLfloat w0, w1, ang0, ang1, angle, x, y, xb, yb, zb;
  
         int slices = 8;
-        //GLfloat bend_radius = 1.0f;
-        //GLfloat radius = 0.1f;
+        GLfloat bend_radius = 1.0f;
+        GLfloat radius = 0.5f;
         GLfloat bend_angle, bend_ang0, bend_ang1; 
  
-        bend_angle = bendRadius * 1.0f;
+        bend_angle = bend_radius * 1.0f;
         bend_ang0  = -bend_angle/2.0f;
         bend_ang1  = bend_angle/2.0f;
  
-        for(int i = 0; i < 8; i++) {
-            float w0 = (float)i / 8.0;
-            float w1 = (float)(i+1) / 8.0;
+        for(int i = 0; i < slices; i++) {
+            float w0 = (float)i / (float)slices;
+            float w1 = (float)(i+1) / (float)slices;
         
             ang0 = bend_ang0 + (bend_ang1-bend_ang0) * w0;
             ang1 = bend_ang0 + (bend_ang1-bend_ang0) * w1;
@@ -104,10 +103,18 @@ public:
             glBegin(GL_QUAD_STRIP);
             for (int j = 0; j <= 360; j++) {
                 angle = PI * (float)j * PI / 180.0f;
-                x = radius * cos(angle) + bendRadius;
+                x = radius * cos(angle) + bend_radius;
                 y = radius * sin(angle);
-                glVertex3f( x * sin(ang0), y, x * cos(ang0));
-                glVertex3f( x * sin(ang1), y, x * cos(ang1));
+    
+                xb = sin( ang0 ) * x;
+                yb = y;
+                zb = cos( ang0 ) * x;
+                glVertex3f( xb, yb, zb );
+    
+                xb = sin( ang1 ) * x;
+                yb = y;
+                zb = cos( ang1 ) * x;
+                glVertex3f( xb, yb, zb );
             }
             glEnd();
         }

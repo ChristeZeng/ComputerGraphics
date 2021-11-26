@@ -72,7 +72,7 @@ public:
             }
             else if(cmd[i] == 'R'){
                 glRotatef(-30, 0, 1, 0);
-                gluCylinder(gluNewQuadric(), 0.01, 0.01, 0.1, 20, 20);
+                gluCylinder(gluNewQuadric(), 0.01, 0.01, 0.05, 20, 20);
             }
         }
         glPopMatrix();

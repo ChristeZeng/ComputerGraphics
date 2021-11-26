@@ -10,7 +10,7 @@ using namespace std;
 
 //1.331094
 #define PI 3.1415926535897932384626433832795
-float HLength = 0.2;
+float HLength = 1.0;
 float HWidth = 0.5;
 float HThickness = 0.2;
 
@@ -63,16 +63,16 @@ public:
             if(cmd[i] == 'S'){
                 glTranslatef(0.055895, 0.798012, -1.227384);
                 glRotatef(-90, 1, 0, 0);
-                gluCylinder(gluNewQuadric(), 0.01, 0.01, 0.1, 20, 20);
-                glTranslatef(0.0, 0.0, 0.1);
+                gluCylinder(gluNewQuadric(), 0.06, 0.06, 1.0, 20, 20);
+                glTranslatef(0.0, 0.0, 1.0);
             }
             else if(cmd[i] == 'L'){
                 glRotatef(30, 0, 1, 0);
-                gluCylinder(gluNewQuadric(), 0.01, 0.01, 0.1, 20, 20);
+                gluCylinder(gluNewQuadric(), 0.06, 0.06, 1.0, 20, 20);
             }
             else if(cmd[i] == 'R'){
                 glRotatef(-30, 0, 1, 0);
-                gluCylinder(gluNewQuadric(), 0.01, 0.01, 0.1, 20, 20);
+                gluCylinder(gluNewQuadric(), 0.06, 0.06, 1.0, 20, 20);
             }
         }
         glPopMatrix();
@@ -80,8 +80,7 @@ public:
     
     void Sweeping(float radius, float bendRadius) {
         glPushMatrix();
-        glRotatef(-180, 0, 1, 0);
-        glTranslatef(0.069733, 0.890669, 1.134200 - 3.0);
+        glTranslatef(0.069733, 0.890669 - 0.3, 1.134200);
         
         GLfloat w0, w1, ang0, ang1, angle, x, y, xb, yb, zb;
  

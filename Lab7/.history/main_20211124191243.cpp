@@ -171,11 +171,8 @@ void Display() {
     DisplayEarthAndMoon();
     DisplayMercury();
     DisplayMars();
-    OBJLoader objLoader("Car.obj");
-    objLoader.LSystem("SLLRRRR");
-    float radius = 0.1;
-    float bradius = 2.0;
-    objLoader.Sweeping(radius, bradius);
+    OBJLoader objLoader("Test.obj");
+    objLoader.LSystem("SLL");
     objLoader.DrawOBJ();
     //刷新与交换缓冲区
     glFlush();
@@ -230,21 +227,21 @@ void GetInputMouse(int button, int state, int x, int y) {
 void GetMotionMouse(int x, int y) {
     
     if(isLeftMousePress) {
-        ViewX += (y - MouseY) * 0.1f;//0.00005f;
-        ViewY += (x - MouseX) * 0.1f;//0.00005f;
+        ViewX += (y - MouseY) * 0.0005f;
+        ViewY += (x - MouseX) * 0.0005f;
         MouseX = x;
         MouseY = y;
     }
 
-    // centerx += eyez * tan(ViewY);
-    // centery -= eyez * tan(ViewX);
-    // //重新设置LookAt函数
-    // glLoadIdentity();
-    // gluLookAt (eyex, eyey, eyez, centerx, centery, centerz, upx, upy, upz);
-    float distance = sqrt(pow(eyex, 2) + pow(eyey, 2) + pow(eyez, 2));
-    eyez = distance * cos(ViewX) * cos(ViewY);
-    eyex = distance * cos(ViewX) * sin(ViewY);
-    eyey = distance * sin(ViewX);
+    centerx += eyez * tan(ViewY);
+    centery -= eyez * tan(ViewX);
+    //重新设置LookAt函数
+    glLoadIdentity();
+    gluLookAt (eyex, eyey, eyez, centerx, centery, centerz, upx, upy, upz);
+    // float distance = sqrt(pow(eyex, 2) + pow(eyey, 2) + pow(eyez, 2));
+    // eyez = distance * cos(ViewX) * cos(ViewY);
+    // eyex = distance * cos(ViewX) * sin(ViewY);
+    // eyey = distance * sin(ViewX);
     glutPostRedisplay();
 }
 

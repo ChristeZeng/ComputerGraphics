@@ -173,9 +173,7 @@ void Display() {
     DisplayMars();
     OBJLoader objLoader("Car.obj");
     objLoader.LSystem("SLLRRRR");
-    float radius = 0.1;
-    float bradius = 2.0;
-    objLoader.Sweeping(radius, bradius);
+    objLoader.Sweeping(0.1， 1.0);
     objLoader.DrawOBJ();
     //刷新与交换缓冲区
     glFlush();
