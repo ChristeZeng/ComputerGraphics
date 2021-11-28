@@ -1,4 +1,4 @@
-#include "ObjLoader.h"
+#include "Car.h"
 
 #define Pi 3.1415926
 /*星球的公转*/
@@ -15,7 +15,8 @@ GLfloat Day;
 GLfloat EarthYear;
 
 /*Lookat函数参数*/
-GLdouble eyex, eyey, eyez = 12;
+GLdouble eyex = 0.0, eyey = 0.0, eyez = 12;
+GLdouble dx = 0.0, dy = 0.0, dz = -1.0;
 GLdouble centerx, centery, centerz;
 GLdouble upx, upy = 1, upz;
 GLdouble radius;
@@ -48,7 +49,7 @@ void Reshape(int width, int height) {
     //设置完成后切换到模型视图矩阵开始画图
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-    gluLookAt (eyex, eyey, eyez, centerx, centery, centerz, upx, upy, upz);
+    gluLookAt (eyex, eyey, eyez, eyex + dx, eyey + dy, eyez + dz, upx, upy, upz);
 }
 
 void setLight(){
@@ -165,17 +166,19 @@ void Display() {
     glMatrixMode(GL_MODELVIEW);
     //重新设置LookAt函数
     glLoadIdentity();
-    gluLookAt (eyex, eyey, eyez, centerx, centery, centerz, upx, upy, upz);
+    gluLookAt (eyex, eyey, eyez, eyex + dx, eyey + dy, eyez + dz, upx, upy, upz);
     //绘制各星球
     //DisplaySun();
     DisplayEarthAndMoon();
     DisplayMercury();
     DisplayMars();
+    glRotatef(-180, 0.0, 1.0, 0.0);
     OBJLoader objLoader("Car.obj");
-    objLoader.LSystem("SLLRRRR");
+    objLoader.LSystem("0", 3);
     float radius = 0.1;
     float bradius = 2.0;
     objLoader.Sweeping(radius, bradius);
+    objLoader.Sweeping2();
     objLoader.DrawOBJ();
     //刷新与交换缓冲区
     glFlush();
@@ -199,19 +202,30 @@ void Idle() {
 
 void GetInputKey(unsigned char key, int x, int y) {
     if(key == 'w') {
-        eyez -= 2;
+        eyex += dx * 0.1;
+	    eyez += dz * 0.1;
+        glLoadIdentity();
+        gluLookAt(eyex, eyey, eyez, eyex + dx, eyey + dy, eyez + dz, upx, upy, upz);
     }
     else if(key == 's') {
-        eyez += 2;
+        eyex -= dx * 0.1;
+        eyez -= dz * 0.1;
+        glLoadIdentity();
+        gluLookAt(eyex, eyey, eyez, eyex + dx, eyey + dy, eyez + dz, upx, upy, upz);
     }
     else if(key == 'a') {
-        centerx -= 2;
-        eyex -= 2;
+        eyex += dz * 0.1;
+        eyez -= dx * 0.1;
+        glLoadIdentity();
+        gluLookAt(eyex, eyey, eyez, eyex + dx, eyey + dy, eyez + dz, upx, upy, upz);
     }
     else if(key == 'd') {
-        eyex += 2;
-        centerx += 2;
+        eyex -= dz * 0.1;
+        eyez += dx * 0.1;
+        glLoadIdentity();
+        gluLookAt(eyex, eyey, eyez, eyex + dx, eyey + dy, eyez + dz, upx, upy, upz);
     }
+    glutPostRedisplay();
 }
 
 void GetInputMouse(int button, int state, int x, int y) {
@@ -230,21 +244,18 @@ void GetInputMouse(int button, int state, int x, int y) {
 void GetMotionMouse(int x, int y) {
     
     if(isLeftMousePress) {
-        ViewX += (y - MouseY) * 0.1f;//0.00005f;
-        ViewY += (x - MouseX) * 0.1f;//0.00005f;
+        ViewX += (x - MouseX) * 0.01f; 
+        ViewY = (y - MouseY) * 0.01f; 
         MouseX = x;
         MouseY = y;
     }
 
-    // centerx += eyez * tan(ViewY);
-    // centery -= eyez * tan(ViewX);
-    // //重新设置LookAt函数
-    // glLoadIdentity();
-    // gluLookAt (eyex, eyey, eyez, centerx, centery, centerz, upx, upy, upz);
-    float distance = sqrt(pow(eyex, 2) + pow(eyey, 2) + pow(eyez, 2));
-    eyez = distance * cos(ViewX) * cos(ViewY);
-    eyex = distance * cos(ViewX) * sin(ViewY);
-    eyey = distance * sin(ViewX);
+    dx = sin(ViewX);
+    dz = -cos(ViewX);
+    dy -= ViewY;
+    //重新设置LookAt函数
+    glLoadIdentity();
+    gluLookAt(eyex, eyey, eyez, eyex + dx, eyey + dy, eyez + dz, upx, upy, upz);
     glutPostRedisplay();
 }
 
@@ -259,7 +270,7 @@ int main(int argc, char* argv[]) {
     //设置窗口大小
     glutInitWindowSize(720, 480);
     //新建窗口并命名
-    glutCreateWindow("SolarSystem");
+    glutCreateWindow("DreamCar");
     //设置正确投影的函数
     glutReshapeFunc(Reshape);
     //设置显示函数

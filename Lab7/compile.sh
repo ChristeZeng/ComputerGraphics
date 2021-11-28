@@ -1,2 +1,2 @@
-g++ main.cpp ObjLoader.h -o main -lGL -lGLU -lglut
+g++ main.cpp Car.h -o main -lGL -lGLU -lglut
 ./main
