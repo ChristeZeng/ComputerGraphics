@@ -73,7 +73,7 @@ void sunmaterial() {
 	GLfloat sun_mat_ambient[] = { 1.0f, 1.0f, 1.0f, 1.0f };  //定义材质的环境光颜色
 	GLfloat sun_mat_diffuse[] = { 1.0f, 1.0f, 1.0f, 1.0f };  //定义材质的漫反射光颜色
 	GLfloat sun_mat_specular[] = { 1.0f, 1.0f, 1.0f, 1.0f };   //定义材质的镜面反射光颜色
-	GLfloat sun_mat_emission[] = { 1.0f, 0.0f, 0.0f, 0.0f };   //定义材质的辐射广颜色
+	GLfloat sun_mat_emission[] = { 1.0f, 0.0f, 0.0f, 1.0f };   //定义材质的辐射广颜色
 	GLfloat sun_mat_shininess = 0.0f;
 	glMaterialfv(GL_FRONT, GL_AMBIENT, sun_mat_ambient);
 	glMaterialfv(GL_FRONT, GL_DIFFUSE, sun_mat_diffuse);

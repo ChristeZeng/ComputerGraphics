@@ -35,7 +35,7 @@ void setLight(){
     GLfloat sun_light_position[] = {0.0f, 0.0f, 0.0f, 1.0f}; //光源的位置在世界坐标系圆心，齐次坐标形式
     GLfloat sun_light_ambient[]  = {0.0f, 0.0f, 0.0f, 1.0f}; //RGBA模式的环境光，为0
     GLfloat sun_light_diffuse[]  = {1.0f, 1.0f, 1.0f, 1.0f}; //RGBA模式的漫反射光，全白光
-    GLfloat sun_light_specular[] = {1.0f, 1.0f, 1.0f, 1.0f}; //RGBA模式下的镜面光 ，全白光
+    GLfloat sun_light_specular[] = {1.0f, 1.0f, 1.0f, 1.0f};  //RGBA模式下的镜面光 ，全白光
     glLightfv(GL_LIGHT0, GL_POSITION, sun_light_position);     
     glLightfv(GL_LIGHT0, GL_AMBIENT,   sun_light_ambient);  
     glLightfv(GL_LIGHT0, GL_DIFFUSE,   sun_light_diffuse);   
@@ -45,6 +45,10 @@ void setLight(){
     glEnable(GL_LIGHT0);    
     glEnable(GL_LIGHTING);   
     glEnable(GL_DEPTH_TEST);
+//     GLfloat lightPosition[] = { 0.0f, 0.0f, 1.0f, 0.0f };
+//     glLightfv(GL_LIGHT0, GL_POSITION, lightPosition);
+//     glEnable(GL_LIGHTING); //启用光源
+//     glEnable(GL_LIGHT0);   //使用指定灯光
 }
 
 void Reshape(int width, int height) {
@@ -66,67 +70,16 @@ void Reshape(int width, int height) {
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
     gluLookAt (eyex, eyey, eyez, eyex + dx, eyey + dy, eyez + dz, upx, upy, upz);
-    //setLight();
+    setLight();
 }
 
-void sunmaterial() {
-	GLfloat sun_mat_ambient[] = { 1.0f, 1.0f, 1.0f, 1.0f };  //定义材质的环境光颜色
-	GLfloat sun_mat_diffuse[] = { 1.0f, 1.0f, 1.0f, 1.0f };  //定义材质的漫反射光颜色
-	GLfloat sun_mat_specular[] = { 1.0f, 1.0f, 1.0f, 1.0f };   //定义材质的镜面反射光颜色
-	GLfloat sun_mat_emission[] = { 1.0f, 0.0f, 0.0f, 0.0f };   //定义材质的辐射广颜色
-	GLfloat sun_mat_shininess = 0.0f;
-	glMaterialfv(GL_FRONT, GL_AMBIENT, sun_mat_ambient);
-	glMaterialfv(GL_FRONT, GL_DIFFUSE, sun_mat_diffuse);
-	glMaterialfv(GL_FRONT, GL_SPECULAR, sun_mat_specular);
-	glMaterialfv(GL_FRONT, GL_EMISSION, sun_mat_emission);
-	glMaterialf(GL_FRONT, GL_SHININESS, sun_mat_shininess);
-}
-
-void earthmaterial() {
+void material_planet()
+{
 	GLfloat earth_mat_ambient[] = { 1.0f, 1.0f, 1.0f, 1.0f };  //定义材质的环境光颜色
-	GLfloat earth_mat_diffuse[] = { 0.0f, 0.0f, 1.0f, 1.0f };  //定义材质的漫反射光颜色
-	GLfloat earth_mat_specular[] = { 0.8f, 0.8f, 0.8f, 0.2f }; //定义材质的镜面反射光颜色
-	GLfloat earth_mat_emission[] = { 0.0f, 0.0f, 0.0f, 1.0f }; //定义材质的辐射光颜色
-	GLfloat earth_mat_shininess = 30.0f;
-	glMaterialfv(GL_FRONT, GL_AMBIENT, earth_mat_ambient);
-	glMaterialfv(GL_FRONT, GL_DIFFUSE, earth_mat_diffuse);
-	glMaterialfv(GL_FRONT, GL_SPECULAR, earth_mat_specular);
-	glMaterialfv(GL_FRONT, GL_EMISSION, earth_mat_emission);
-	glMaterialf(GL_FRONT, GL_SHININESS, earth_mat_shininess);
-}
-
-void moonmaterial() {
-    GLfloat earth_mat_ambient[] = { 1.0f, 1.0f, 1.0f, 1.0f };  //定义材质的环境光颜色
 	GLfloat earth_mat_diffuse[] = { 1.0f, 1.0f, 1.0f, 1.0f };  //定义材质的漫反射光颜色
-	GLfloat earth_mat_specular[] = { 0.8f, 0.8f, 0.8f, 0.2f }; //定义材质的镜面反射光颜色
-	GLfloat earth_mat_emission[] = { 0.0f, 0.0f, 0.0f, 1.0f }; //定义材质的辐射光颜色
-	GLfloat earth_mat_shininess = 30.0f;
-	glMaterialfv(GL_FRONT, GL_AMBIENT, earth_mat_ambient);
-	glMaterialfv(GL_FRONT, GL_DIFFUSE, earth_mat_diffuse);
-	glMaterialfv(GL_FRONT, GL_SPECULAR, earth_mat_specular);
-	glMaterialfv(GL_FRONT, GL_EMISSION, earth_mat_emission);
-	glMaterialf(GL_FRONT, GL_SHININESS, earth_mat_shininess);
-}
-
-void mercurymaterial() {
-    GLfloat earth_mat_ambient[] = { 1.0f, 1.0f, 1.0f, 1.0f };  //定义材质的环境光颜色
-	GLfloat earth_mat_diffuse[] = { 0.0f, 1.0f, 0.0f, 1.0f };  //定义材质的漫反射光颜色
-	GLfloat earth_mat_specular[] = { 0.8f, 0.8f, 0.8f, 0.2f }; //定义材质的镜面反射光颜色
-	GLfloat earth_mat_emission[] = { 0.0f, 0.0f, 0.0f, 1.0f }; //定义材质的辐射光颜色
-	GLfloat earth_mat_shininess = 30.0f;
-	glMaterialfv(GL_FRONT, GL_AMBIENT, earth_mat_ambient);
-	glMaterialfv(GL_FRONT, GL_DIFFUSE, earth_mat_diffuse);
-	glMaterialfv(GL_FRONT, GL_SPECULAR, earth_mat_specular);
-	glMaterialfv(GL_FRONT, GL_EMISSION, earth_mat_emission);
-	glMaterialf(GL_FRONT, GL_SHININESS, earth_mat_shininess);
-}
-
-void marsmaterial() {
-    GLfloat earth_mat_ambient[] = { 1.0f, 1.0f, 1.0f, 1.0f };  //定义材质的环境光颜色
-	GLfloat earth_mat_diffuse[] = { 0.0f, 1.0f, 1.0f, 1.0f };  //定义材质的漫反射光颜色
-	GLfloat earth_mat_specular[] = { 0.8f, 0.8f, 0.8f, 0.2f }; //定义材质的镜面反射光颜色
-	GLfloat earth_mat_emission[] = { 0.0f, 0.0f, 0.0f, 1.0f }; //定义材质的辐射光颜色
-	GLfloat earth_mat_shininess = 30.0f;
+	GLfloat earth_mat_specular[] = { 0.8f, 0.8f, 0.8f, 0.2f };   //定义材质的镜面反射光颜色
+	GLfloat earth_mat_emission[] = { 0.0f, 0.0f, 0.0f, 1.0f };   //定义材质的辐射光颜色
+	GLfloat earth_mat_shininess = 5.0f;
 	glMaterialfv(GL_FRONT, GL_AMBIENT, earth_mat_ambient);
 	glMaterialfv(GL_FRONT, GL_DIFFUSE, earth_mat_diffuse);
 	glMaterialfv(GL_FRONT, GL_SPECULAR, earth_mat_specular);
@@ -137,7 +90,16 @@ void marsmaterial() {
 void DisplaySun() {
     glPushMatrix();
     /*材质*/
-    sunmaterial();
+    GLfloat sun_mat_ambient[]   = {0.0f, 0.0f, 0.0f, 1.0f};  //定义材质的环境光颜色，为0
+    GLfloat sun_mat_diffuse[]   = {0.0f, 0.0f, 0.0f, 1.0f};  //定义材质的漫反射光颜色，为0
+    GLfloat sun_mat_specular[] = {0.0f, 0.0f, 0.0f, 1.0f};   //定义材质的镜面反射光颜色，为0
+    GLfloat sun_mat_emission[] = {0.8f, 0.0f, 0.0f, 1.0f};   //定义材质的辐射广颜色，为偏红色
+    GLfloat sun_mat_shininess   = 0.0f;        
+    glMaterialfv(GL_FRONT, GL_AMBIENT,    sun_mat_ambient);    
+    glMaterialfv(GL_FRONT, GL_DIFFUSE,    sun_mat_diffuse);   
+    glMaterialfv(GL_FRONT, GL_SPECULAR,   sun_mat_specular);    
+    glMaterialfv(GL_FRONT, GL_EMISSION,   sun_mat_emission);   
+    glMaterialf (GL_FRONT, GL_SHININESS, sun_mat_shininess);   
     /*绘制*/
     //glColor3f(1.0f, 0.0f, 0.0f);
 
@@ -149,7 +111,7 @@ void DisplaySun() {
 
 void DisplayMercury() {
     glPushMatrix();
-    mercurymaterial();
+    glColor3f(0.0f, 1.0f, 0.0f);
     
     glRotatef(atan(ry / (rz + 1.0)) * 180 / Pi, -1.0, 0.0, 0.0);
     glutSolidTorus(0.01, 3.0, 100, 100);
@@ -163,8 +125,18 @@ void DisplayMercury() {
 
 void DisplayEarthAndMoon() {
     glPushMatrix();
-    earthmaterial();
-
+    //glColor3f(0.0f, 0.0f, 1.0f);
+    material_planet();
+    // GLfloat earth_mat_ambient[]   = {0.0f, 0.0f, 1.0f, 1.0f};  //定义材质的环境光颜色，骗蓝色
+    // GLfloat earth_mat_diffuse[]   = {0.0f, 0.0f, 0.5f, 1.0f};  //定义材质的漫反射光颜色，偏蓝色
+    // GLfloat earth_mat_specular[] = {1.0f, 0.0f, 0.0f, 1.0f};   //定义材质的镜面反射光颜色，红色
+    // GLfloat earth_mat_emission[] = {0.0f, 0.0f, 0.0f, 1.0f};   //定义材质的辐射光颜色，为0
+    // GLfloat earth_mat_shininess   = 30.0f;       
+    // glMaterialfv(GL_FRONT, GL_AMBIENT,    earth_mat_ambient);   
+    // glMaterialfv(GL_FRONT, GL_DIFFUSE,    earth_mat_diffuse);    
+    // glMaterialfv(GL_FRONT, GL_SPECULAR,   earth_mat_specular);     
+    // glMaterialfv(GL_FRONT, GL_EMISSION,   earth_mat_emission);   
+    // glMaterialf (GL_FRONT, GL_SHININESS, earth_mat_shininess);
     /*画地球*/
     //画星轨
     glRotatef(atan(ry / rz) * 180 / Pi, -1.0, 0.0, 0.0);
@@ -180,8 +152,7 @@ void DisplayEarthAndMoon() {
     glPopMatrix();
 
     /*画月球*/
-    //glColor3f(1.0f, 1.0f, 0.0f);
-    moonmaterial();
+    glColor3f(1.0f, 1.0f, 0.0f);
     //画星规
     glRotatef(atan(1.0 / 0.3) * 180 / Pi, -1.0, 0.0, 0.0);
     glutSolidTorus(0.01, 1.5, 100, 100);
@@ -199,7 +170,7 @@ void DisplayEarthAndMoon() {
 
 void DisplayMars() {
     glPushMatrix();
-    marsmaterial();
+    glColor3f(1.0f, 0.647f, 0.0f);
     /*画*/
     //画星轨
     glRotatef(atan(ry / (rz + 0.5)) * 180 / Pi, -1.0, 0.0, 0.0);
@@ -215,7 +186,8 @@ void DisplayMars() {
     glPopMatrix();
 
     glPushMatrix();
-    moonmaterial();
+    /*画月球*/
+    glColor3f(0.5f, 0.0f, 0.5f);
     //画星规
     glRotatef(atan(1.0 / 0.3) * 180 / Pi, -1.0, 0.0, 0.0);
     glutSolidTorus(0.01, 1.5, 100, 100);
@@ -226,7 +198,7 @@ void DisplayMars() {
     glutSolidSphere(0.2f, 20, 20);
     glPopMatrix();
 
-    moonmaterial();
+    glColor3f(0.5f, 0.5f, 0.0f);
     glRotatef(atan(1.0 / 1.0) * 180 / Pi, -1.0, 0.0, 0.0);
     glutSolidTorus(0.01, 0.7, 100, 100);
     glRotatef(-atan(1.0 / 1.0)* 180 / Pi, -1.0, 0.0, 0.0);

@@ -121,19 +121,6 @@ void mercurymaterial() {
 	glMaterialf(GL_FRONT, GL_SHININESS, earth_mat_shininess);
 }
 
-void marsmaterial() {
-    GLfloat earth_mat_ambient[] = { 1.0f, 1.0f, 1.0f, 1.0f };  //定义材质的环境光颜色
-	GLfloat earth_mat_diffuse[] = { 0.0f, 1.0f, 1.0f, 1.0f };  //定义材质的漫反射光颜色
-	GLfloat earth_mat_specular[] = { 0.8f, 0.8f, 0.8f, 0.2f }; //定义材质的镜面反射光颜色
-	GLfloat earth_mat_emission[] = { 0.0f, 0.0f, 0.0f, 1.0f }; //定义材质的辐射光颜色
-	GLfloat earth_mat_shininess = 30.0f;
-	glMaterialfv(GL_FRONT, GL_AMBIENT, earth_mat_ambient);
-	glMaterialfv(GL_FRONT, GL_DIFFUSE, earth_mat_diffuse);
-	glMaterialfv(GL_FRONT, GL_SPECULAR, earth_mat_specular);
-	glMaterialfv(GL_FRONT, GL_EMISSION, earth_mat_emission);
-	glMaterialf(GL_FRONT, GL_SHININESS, earth_mat_shininess);
-}
-
 void DisplaySun() {
     glPushMatrix();
     /*材质*/
@@ -199,7 +186,7 @@ void DisplayEarthAndMoon() {
 
 void DisplayMars() {
     glPushMatrix();
-    marsmaterial();
+    glColor3f(1.0f, 0.647f, 0.0f);
     /*画*/
     //画星轨
     glRotatef(atan(ry / (rz + 0.5)) * 180 / Pi, -1.0, 0.0, 0.0);
@@ -215,7 +202,8 @@ void DisplayMars() {
     glPopMatrix();
 
     glPushMatrix();
-    moonmaterial();
+    /*画月球*/
+    glColor3f(0.5f, 0.0f, 0.5f);
     //画星规
     glRotatef(atan(1.0 / 0.3) * 180 / Pi, -1.0, 0.0, 0.0);
     glutSolidTorus(0.01, 1.5, 100, 100);
@@ -226,7 +214,7 @@ void DisplayMars() {
     glutSolidSphere(0.2f, 20, 20);
     glPopMatrix();
 
-    moonmaterial();
+    glColor3f(0.5f, 0.5f, 0.0f);
     glRotatef(atan(1.0 / 1.0) * 180 / Pi, -1.0, 0.0, 0.0);
     glutSolidTorus(0.01, 0.7, 100, 100);
     glRotatef(-atan(1.0 / 1.0)* 180 / Pi, -1.0, 0.0, 0.0);
