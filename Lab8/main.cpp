@@ -357,7 +357,7 @@ int main(int argc, char* argv[]) {
     //设置窗口大小
     glutInitWindowSize(720, 480);
     //新建窗口并命名
-    glutCreateWindow("DreamCar");
+    glutCreateWindow("SolarSystem");
     //设置正确投影的函数
     glutReshapeFunc(Reshape);
     //设置显示函数
