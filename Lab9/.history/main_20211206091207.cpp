@@ -31,6 +31,14 @@ float MouseY;
 float ViewX = 0;
 float ViewY = 0;
 
+/*材质*/
+GLUquadricObj *texture = gluNewQuadric();
+struct Texture {
+    int width;
+    int height;
+    unsigned char *data;
+};
+
 void setLight(){
     GLfloat sun_light_position[] = {0.0f, 0.0f, 0.0f, 1.0f}; //光源的位置在世界坐标系圆心，齐次坐标形式
     GLfloat sun_light_ambient[]  = {0.0f, 0.0f, 0.0f, 1.0f}; //RGBA模式的环境光，为0
@@ -351,7 +359,7 @@ int main(int argc, char* argv[]) {
     //初始化GLUT库
     glutInit(&argc, argv);
     //指定显示模式，使用双缓冲区
-    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH);
+    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
     //设置窗口位置
     glutInitWindowPosition(200, 200);
     //设置窗口大小
@@ -373,8 +381,8 @@ int main(int argc, char* argv[]) {
     //启用深度测试
     glEnable(GL_DEPTH_TEST);
     glShadeModel(GL_SMOOTH);
-    // glEnable(GL_DEPTH_TEST);
-    // glClearColor(0.0f, 0.0f, 0.0f, 0.8f);
+    glEnable(GL_DEPTH_TEST);
+    glClearColor(0.0f, 0.0f, 0.0f, 0.8f);
     glutMainLoop();
     return 0;
 }

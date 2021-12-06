@@ -351,7 +351,7 @@ int main(int argc, char* argv[]) {
     //初始化GLUT库
     glutInit(&argc, argv);
     //指定显示模式，使用双缓冲区
-    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH);
+    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
     //设置窗口位置
     glutInitWindowPosition(200, 200);
     //设置窗口大小
@@ -373,8 +373,8 @@ int main(int argc, char* argv[]) {
     //启用深度测试
     glEnable(GL_DEPTH_TEST);
     glShadeModel(GL_SMOOTH);
-    // glEnable(GL_DEPTH_TEST);
-    // glClearColor(0.0f, 0.0f, 0.0f, 0.8f);
+    glEnable(GL_DEPTH_TEST);
+    glClearColor(0.0f, 0.0f, 0.0f, 0.8f);
     glutMainLoop();
     return 0;
 }

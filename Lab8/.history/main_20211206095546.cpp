@@ -373,8 +373,8 @@ int main(int argc, char* argv[]) {
     //启用深度测试
     glEnable(GL_DEPTH_TEST);
     glShadeModel(GL_SMOOTH);
-    // glEnable(GL_DEPTH_TEST);
-    // glClearColor(0.0f, 0.0f, 0.0f, 0.8f);
+    glEnable(GL_DEPTH_TEST);
+    glClearColor(0.0f, 0.0f, 0.0f, 0.8f);
     glutMainLoop();
     return 0;
 }

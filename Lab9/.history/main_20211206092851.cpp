@@ -1,5 +1,5 @@
 #include "Car.h"
-
+#include "stb_image.cpp"
 #define Pi 3.1415926
 /*星球的公转*/
 GLfloat fEarth        = 2.0f;
@@ -31,6 +31,47 @@ float MouseY;
 float ViewX = 0;
 float ViewY = 0;
 
+/*材质*/
+GLUquadricObj *texture = gluNewQuadric();
+struct Texture {
+    int width;
+    int height;
+    unsigned char *data;
+};
+typedef struct Texture Texture;
+GLuint TextureID[6];
+Texture TextureArray[6];
+
+Texture LoadTexture(const char *filename) {
+    Texture texture;
+    int width, height, nrChannels;
+    texture.data = stbi_load(filename, &width, &height, &nrChannels, 0);
+    texture.width = width;
+    texture.height = height;
+    return texture;
+}
+
+void BindTexture(){
+    memset(TextureArray, 0, sizeof(TextureArray) * 6);
+    TextureArray[0] = LoadTexture("earth.jpg");
+    //TextureArray[1] = LoadTexture("moon.jpg");
+    //TextureArray[2] = LoadTexture("sun.jpg");
+    //TextureArray[3] = LoadTexture("mercury.jpg");
+    //TextureArray[4] = LoadTexture("mars.jpg");
+    //TextureArray[5] = LoadTexture("mars_sate1.jpg");
+
+    glGenTextures(6, TextureID);
+    for(int i = 0; i < 6; i++) {
+        glBindTexture(GL_TEXTURE_2D, TextureID[i]);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, TextureArray[i].width, TextureArray[i].height, 0, GL_RGB, GL_UNSIGNED_BYTE, TextureArray[i].data);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    }
+
+    for(int i = 0; i < 6; i++) {
+        stbi_image_free(TextureArray[i].data);
+    }
+}   
 void setLight(){
     GLfloat sun_light_position[] = {0.0f, 0.0f, 0.0f, 1.0f}; //光源的位置在世界坐标系圆心，齐次坐标形式
     GLfloat sun_light_ambient[]  = {0.0f, 0.0f, 0.0f, 1.0f}; //RGBA模式的环境光，为0
@@ -139,11 +180,19 @@ void DisplaySun() {
     /*材质*/
     sunmaterial();
     /*绘制*/
-    //glColor3f(1.0f, 0.0f, 0.0f);
-
     glTranslatef(0.0f, 0.0f, 0.0f);
     glRotatef(0, 0.0, 1.0, 0.0);
+
+    gluQuadricTexture(texture, GL_TRUE);
+    glPushAttrib(GL_ENABLE_BIT | GL_TEXTURE_BIT);
+    glEnable(GL_TEXTURE_2D);
+    
     glutSolidSphere(1.5f, 20, 20);
+
+    glBindTexture(GL_TEXTURE_2D, TextureID[0]);
+    glPopAttrib();
+    gluQuadricTexture(texture, GL_FALSE);
+
     glPopMatrix();
 }
 
@@ -351,7 +400,7 @@ int main(int argc, char* argv[]) {
     //初始化GLUT库
     glutInit(&argc, argv);
     //指定显示模式，使用双缓冲区
-    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH);
+    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
     //设置窗口位置
     glutInitWindowPosition(200, 200);
     //设置窗口大小
@@ -373,8 +422,8 @@ int main(int argc, char* argv[]) {
     //启用深度测试
     glEnable(GL_DEPTH_TEST);
     glShadeModel(GL_SMOOTH);
-    // glEnable(GL_DEPTH_TEST);
-    // glClearColor(0.0f, 0.0f, 0.0f, 0.8f);
+    glEnable(GL_DEPTH_TEST);
+    glClearColor(0.0f, 0.0f, 0.0f, 0.8f);
     glutMainLoop();
     return 0;
 }

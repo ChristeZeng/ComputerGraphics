@@ -1,5 +1,5 @@
 #include "Car.h"
-
+#include "stb_image.h"
 #define Pi 3.1415926
 /*星球的公转*/
 GLfloat fEarth        = 2.0f;
@@ -31,6 +31,57 @@ float MouseY;
 float ViewX = 0;
 float ViewY = 0;
 
+/*材质*/
+GLUquadricObj *texture = gluNewQuadric();
+struct Texture {
+    int width;
+    int height;
+    int nrChannels;
+    unsigned char *data;
+};
+typedef struct Texture Texture;
+GLuint TextureID[5];
+Texture TextureArray[5];
+
+Texture LoadTexture(const char *filename) {
+    Texture texture;
+    int width, height, nrChannels;
+    texture.data = stbi_load(filename, &width, &height, &nrChannels, 0);
+    if(!texture.data) {
+        std::cout << "Failed to load texture " << filename << std::endl;
+    }
+    texture.width = width;
+    texture.height = height;
+    texture.nrChannels = nrChannels;
+    return texture;
+}
+
+void BindTexture(){
+    memset(TextureArray, 0, sizeof(TextureArray) * 6);
+    TextureArray[0] = LoadTexture("earth.jpg");
+    TextureArray[1] = LoadTexture("moon.jpg");
+    TextureArray[2] = LoadTexture("sun.jpg");
+    TextureArray[3] = LoadTexture("mercury.jpg");
+    TextureArray[4] = LoadTexture("mars.jpg");
+
+    glGenTextures(5, &TextureID[0]);
+    for(int i = 0; i < 5; i++) {
+        std::cout << "TextureID[" << i << "] = " << TextureID[i] << std::endl; 
+        glBindTexture(GL_TEXTURE_2D, TextureID[i]);
+        if(TextureArray[i].nrChannels == 3) {
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, TextureArray[i].width, TextureArray[i].height, 0, GL_RGB, GL_UNSIGNED_BYTE, TextureArray[i].data);
+        } else if(TextureArray[i].nrChannels == 4) {
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, TextureArray[i].width, TextureArray[i].height, 0, GL_RGBA, GL_UNSIGNED_BYTE, TextureArray[i].data);
+        }
+        //glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, TextureArray[i].width, TextureArray[i].height, 0, GL_RGB, GL_UNSIGNED_BYTE, TextureArray[i].data);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    }
+
+    for(int i = 0; i < 5; i++) {
+        stbi_image_free(TextureArray[i].data);
+    }
+}   
 void setLight(){
     GLfloat sun_light_position[] = {0.0f, 0.0f, 0.0f, 1.0f}; //光源的位置在世界坐标系圆心，齐次坐标形式
     GLfloat sun_light_ambient[]  = {0.0f, 0.0f, 0.0f, 1.0f}; //RGBA模式的环境光，为0
@@ -73,7 +124,7 @@ void sunmaterial() {
 	GLfloat sun_mat_ambient[] = { 1.0f, 1.0f, 1.0f, 1.0f };  //定义材质的环境光颜色
 	GLfloat sun_mat_diffuse[] = { 1.0f, 1.0f, 1.0f, 1.0f };  //定义材质的漫反射光颜色
 	GLfloat sun_mat_specular[] = { 1.0f, 1.0f, 1.0f, 1.0f };   //定义材质的镜面反射光颜色
-	GLfloat sun_mat_emission[] = { 1.0f, 0.0f, 0.0f, 0.0f };   //定义材质的辐射广颜色
+	GLfloat sun_mat_emission[] = { 1.0f, 1.0f, 1.0f, 1.0f };   //定义材质的辐射广颜色
 	GLfloat sun_mat_shininess = 0.0f;
 	glMaterialfv(GL_FRONT, GL_AMBIENT, sun_mat_ambient);
 	glMaterialfv(GL_FRONT, GL_DIFFUSE, sun_mat_diffuse);
@@ -84,7 +135,7 @@ void sunmaterial() {
 
 void earthmaterial() {
 	GLfloat earth_mat_ambient[] = { 1.0f, 1.0f, 1.0f, 1.0f };  //定义材质的环境光颜色
-	GLfloat earth_mat_diffuse[] = { 0.0f, 0.0f, 1.0f, 1.0f };  //定义材质的漫反射光颜色
+	GLfloat earth_mat_diffuse[] = { 1.0f, 1.0f, 1.0f, 1.0f };  //定义材质的漫反射光颜色
 	GLfloat earth_mat_specular[] = { 0.8f, 0.8f, 0.8f, 0.2f }; //定义材质的镜面反射光颜色
 	GLfloat earth_mat_emission[] = { 0.0f, 0.0f, 0.0f, 1.0f }; //定义材质的辐射光颜色
 	GLfloat earth_mat_shininess = 30.0f;
@@ -139,11 +190,21 @@ void DisplaySun() {
     /*材质*/
     sunmaterial();
     /*绘制*/
-    //glColor3f(1.0f, 0.0f, 0.0f);
-
     glTranslatef(0.0f, 0.0f, 0.0f);
     glRotatef(0, 0.0, 1.0, 0.0);
-    glutSolidSphere(1.5f, 20, 20);
+
+    gluQuadricTexture(texture, GL_TRUE);
+    glPushAttrib(GL_ENABLE_BIT | GL_TEXTURE_BIT);
+    glEnable(GL_TEXTURE_2D);
+    
+    glBindTexture(GL_TEXTURE_2D, TextureID[2]);
+    //glutSolidSphere(1.5f, 20, 20);
+    gluSphere(texture, 1.5f, 20, 20);
+    glBindTexture(GL_TEXTURE_2D, 0);
+
+    glPopAttrib();
+    gluQuadricTexture(texture, GL_FALSE);
+
     glPopMatrix();
 }
 
@@ -157,7 +218,19 @@ void DisplayMercury() {
 
     glRotatef(fMerrcury, rx, ry, rz + 1.0);   
     glTranslatef(3.0f, 0.0f, 0.0f);
-    glutSolidSphere(1.0f, 20, 20);
+
+    gluQuadricTexture(texture, GL_TRUE);
+    glPushAttrib(GL_ENABLE_BIT | GL_TEXTURE_BIT);
+    glEnable(GL_TEXTURE_2D);
+
+    glBindTexture(GL_TEXTURE_2D, TextureID[3]);
+    //glutSolidSphere(1.0f, 20, 20);
+    gluSphere(texture, 1.0f, 20, 20);
+    glBindTexture(GL_TEXTURE_2D, 0);
+
+    glPopAttrib();
+    gluQuadricTexture(texture, GL_FALSE);
+
     glPopMatrix();
 }
 
@@ -176,7 +249,18 @@ void DisplayEarthAndMoon() {
     //自转
     glPushMatrix();
     glRotatef(Day, 0.0, 1.0, 0.0);       //zizhuan
-    glutSolidSphere(0.8f, 20, 20);
+    
+    
+    gluQuadricTexture(texture, GL_TRUE);
+    glPushAttrib(GL_ENABLE_BIT | GL_TEXTURE_BIT);
+    glEnable(GL_TEXTURE_2D);
+    glBindTexture(GL_TEXTURE_2D, TextureID[0]);
+    //glutSolidSphere(0.8f, 20, 20);
+    gluSphere(texture, 0.8f, 20, 20);
+    glBindTexture(GL_TEXTURE_2D, 0);
+    glPopAttrib();
+    gluQuadricTexture(texture, GL_FALSE);
+
     glPopMatrix();
 
     /*画月球*/
@@ -191,8 +275,16 @@ void DisplayEarthAndMoon() {
     glTranslatef(1.5f, 0.0f, 0.0f);
     glRotatef(Day, 0.0f, 1.0f, 0.0f);
 
+    gluQuadricTexture(texture, GL_TRUE);
+    glPushAttrib(GL_ENABLE_BIT | GL_TEXTURE_BIT);
+    glEnable(GL_TEXTURE_2D);
+
+    //glutSolidSphere(0.2f, 20, 20);
+    gluSphere(texture, 0.2f, 20, 20);
+    glBindTexture(GL_TEXTURE_2D, TextureID[1]);
+    glPopAttrib();
+    gluQuadricTexture(texture, GL_FALSE);
     
-    glutSolidSphere(0.2f, 20, 20);
 
     glPopMatrix();
 }
@@ -211,7 +303,19 @@ void DisplayMars() {
     //自转
     glPushMatrix();
     glRotatef(Day, 0.0, 1.0, 0.0);       //zizhuan
-    glutSolidSphere(0.6f, 20, 20);
+
+    
+    gluQuadricTexture(texture, GL_TRUE);
+    glPushAttrib(GL_ENABLE_BIT | GL_TEXTURE_BIT);
+    glEnable(GL_TEXTURE_2D);
+
+    //glutSolidSphere(0.6f, 20, 20);
+    gluSphere(texture, 0.6f, 20, 20);
+    
+    glBindTexture(GL_TEXTURE_2D, TextureID[4]);
+    glPopAttrib();
+    gluQuadricTexture(texture, GL_FALSE);
+
     glPopMatrix();
 
     glPushMatrix();
@@ -372,9 +476,16 @@ int main(int argc, char* argv[]) {
     glutMotionFunc(GetMotionMouse);
     //启用深度测试
     glEnable(GL_DEPTH_TEST);
+    //设置材质
+    BindTexture();
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glEnable(GL_BLEND);
+
+    //设置光源
     glShadeModel(GL_SMOOTH);
-    // glEnable(GL_DEPTH_TEST);
-    // glClearColor(0.0f, 0.0f, 0.0f, 0.8f);
+
+    //glEnable(GL_DEPTH_TEST);
+    //glClearColor(0.0f, 0.0f, 0.0f, 0.8f);
     glutMainLoop();
     return 0;
 }
