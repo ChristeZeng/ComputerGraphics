@@ -59,8 +59,8 @@ Texture LoadTexture(const char *filename) {
 
 void BindTexture(){
     memset(TextureArray, 0, sizeof(TextureArray) * TextureNum);
-    TextureArray[0] = LoadTexture("Texture/moon.jpg");
-    TextureArray[1] = LoadTexture("Texture/neptune.jpg");
+    TextureArray[0] = LoadTexture("Texture/jupiter.jpg");
+    TextureArray[1] = LoadTexture("Texture/moon.jpg");
     TextureArray[2] = LoadTexture("Texture/sun.jpg");
     TextureArray[3] = LoadTexture("Texture/mercury.jpg");
     TextureArray[4] = LoadTexture("Texture/mars.jpg");
@@ -77,8 +77,8 @@ void BindTexture(){
         glBindTexture(GL_TEXTURE_2D, TextureID[i]);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
         //glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
         if(TextureArray[i].nrChannels == 3) {
             glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, TextureArray[i].width, TextureArray[i].height, 0, GL_RGB, GL_UNSIGNED_BYTE, TextureArray[i].data);

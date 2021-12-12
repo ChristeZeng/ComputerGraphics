@@ -58,35 +58,37 @@ Texture LoadTexture(const char *filename) {
 }
 
 void BindTexture(){
-    memset(TextureArray, 0, sizeof(TextureArray) * TextureNum);
-    TextureArray[0] = LoadTexture("Texture/moon.jpg");
-    TextureArray[1] = LoadTexture("Texture/neptune.jpg");
-    TextureArray[2] = LoadTexture("Texture/sun.jpg");
-    TextureArray[3] = LoadTexture("Texture/mercury.jpg");
-    TextureArray[4] = LoadTexture("Texture/mars.jpg");
-    TextureArray[5] = LoadTexture("skybox/back.jpg");
-    TextureArray[6] = LoadTexture("skybox/front.jpg");
-    TextureArray[7] = LoadTexture("skybox/bottom.jpg");
-    TextureArray[8] = LoadTexture("skybox/top.jpg");
-    TextureArray[9] = LoadTexture("skybox/left.jpg");
-    TextureArray[10] = LoadTexture("skybox/right.jpg");
+    memset(TextureArray, 0, sizeof(TextureArray) * 6);
+    TextureArray[0] = LoadTexture("earth.jpg");
+    TextureArray[1] = LoadTexture("moon.jpg");
+    TextureArray[2] = LoadTexture("sun.jpg");
+    TextureArray[3] = LoadTexture("mercury.jpg");
+    TextureArray[4] = LoadTexture("mars.jpg");
+    TextureArray[5] = LoadTexture("BACK.jpg");
+    TextureArray[6] = LoadTexture("FRONT.jpg");
+    TextureArray[7] = LoadTexture("BOTTOM.jpg");
+    TextureArray[8] = LoadTexture("TOP.jpg");
+    TextureArray[9] = LoadTexture("LEFT.jpg");
+    TextureArray[10] = LoadTexture("RIGHT.jpg");
 
     glGenTextures(TextureNum, &TextureID[0]);
     for(int i = 0; i < TextureNum; i++) {
         //std::cout << "TextureID[" << i << "] = " << TextureID[i] << std::endl; 
         glBindTexture(GL_TEXTURE_2D, TextureID[i]);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-        //glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+        glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
         if(TextureArray[i].nrChannels == 3) {
             glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, TextureArray[i].width, TextureArray[i].height, 0, GL_RGB, GL_UNSIGNED_BYTE, TextureArray[i].data);
         } else if(TextureArray[i].nrChannels == 4) {
             glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, TextureArray[i].width, TextureArray[i].height, 0, GL_RGBA, GL_UNSIGNED_BYTE, TextureArray[i].data);
         }
-        
-        
+        //glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, TextureArray[i].width, TextureArray[i].height, 0, GL_RGB, GL_UNSIGNED_BYTE, TextureArray[i].data);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+        glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR );
+        glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR_MIPMAP_LINEAR );
+        glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE );
+        glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE );
     }
 
     for(int i = 0; i < TextureNum; i++) {
@@ -269,7 +271,7 @@ void moonmaterial() {
 
 void mercurymaterial() {
     GLfloat earth_mat_ambient[] = { 1.0f, 1.0f, 1.0f, 1.0f };  //定义材质的环境光颜色
-	GLfloat earth_mat_diffuse[] = { 1.0f, 1.0f, 1.0f, 1.0f };  //定义材质的漫反射光颜色
+	GLfloat earth_mat_diffuse[] = { 0.0f, 1.0f, 0.0f, 1.0f };  //定义材质的漫反射光颜色
 	GLfloat earth_mat_specular[] = { 0.8f, 0.8f, 0.8f, 0.2f }; //定义材质的镜面反射光颜色
 	GLfloat earth_mat_emission[] = { 0.0f, 0.0f, 0.0f, 1.0f }; //定义材质的辐射光颜色
 	GLfloat earth_mat_shininess = 30.0f;
@@ -282,7 +284,7 @@ void mercurymaterial() {
 
 void marsmaterial() {
     GLfloat earth_mat_ambient[] = { 1.0f, 1.0f, 1.0f, 1.0f };  //定义材质的环境光颜色
-	GLfloat earth_mat_diffuse[] = { 1.0f, 1.0f, 1.0f, 1.0f };  //定义材质的漫反射光颜色
+	GLfloat earth_mat_diffuse[] = { 0.0f, 1.0f, 1.0f, 1.0f };  //定义材质的漫反射光颜色
 	GLfloat earth_mat_specular[] = { 0.8f, 0.8f, 0.8f, 0.2f }; //定义材质的镜面反射光颜色
 	GLfloat earth_mat_emission[] = { 0.0f, 0.0f, 0.0f, 1.0f }; //定义材质的辐射光颜色
 	GLfloat earth_mat_shininess = 30.0f;
@@ -438,19 +440,7 @@ void DisplayMars() {
     glRotatef(fMarsSate1, 0.0, 1.0, 0.3);
     glTranslatef(1.5f, 0.0f, 0.0f);
     glRotatef(Day, 0.0f, 1.0f, 0.0f);
-
-    //glutSolidSphere(0.2f, 20, 20);
-    gluQuadricTexture(texture, GL_TRUE);
-    glPushAttrib(GL_ENABLE_BIT | GL_TEXTURE_BIT);
-    glEnable(GL_TEXTURE_2D);
-    
-    glBindTexture(GL_TEXTURE_2D, TextureID[1]);
-    //glutSolidSphere(0.2f, 20, 20);
-    gluSphere(texture, 0.2f, 20, 20);
-    glBindTexture(GL_TEXTURE_2D, 0);
-    glPopAttrib();
-    gluQuadricTexture(texture, GL_FALSE);
-
+    glutSolidSphere(0.2f, 20, 20);
     glPopMatrix();
 
     moonmaterial();
@@ -460,18 +450,7 @@ void DisplayMars() {
     glRotatef(fMarsSate2, 0.0, 1.0, 1.0);
     glTranslatef(0.7f, 0.0f, 0.0f);
     glRotatef(Day, 0.0f, 1.0f, 0.0f);
-
-    //glutSolidSphere(0.15f, 20, 20);
-     gluQuadricTexture(texture, GL_TRUE);
-    glPushAttrib(GL_ENABLE_BIT | GL_TEXTURE_BIT);
-    glEnable(GL_TEXTURE_2D);
-    
-    glBindTexture(GL_TEXTURE_2D, TextureID[1]);
-    //glutSolidSphere(0.2f, 20, 20);
-    gluSphere(texture, 0.15f, 20, 20);
-    glBindTexture(GL_TEXTURE_2D, 0);
-    glPopAttrib();
-    gluQuadricTexture(texture, GL_FALSE);
+    glutSolidSphere(0.15f, 20, 20);
 
     glPopMatrix();
 }

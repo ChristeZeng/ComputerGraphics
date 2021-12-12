@@ -60,7 +60,7 @@ Texture LoadTexture(const char *filename) {
 void BindTexture(){
     memset(TextureArray, 0, sizeof(TextureArray) * TextureNum);
     TextureArray[0] = LoadTexture("Texture/moon.jpg");
-    TextureArray[1] = LoadTexture("Texture/neptune.jpg");
+    TextureArray[1] = LoadTexture("Texture/moon.jpg");
     TextureArray[2] = LoadTexture("Texture/sun.jpg");
     TextureArray[3] = LoadTexture("Texture/mercury.jpg");
     TextureArray[4] = LoadTexture("Texture/mars.jpg");

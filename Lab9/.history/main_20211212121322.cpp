@@ -58,9 +58,9 @@ Texture LoadTexture(const char *filename) {
 }
 
 void BindTexture(){
-    memset(TextureArray, 0, sizeof(TextureArray) * TextureNum);
-    TextureArray[0] = LoadTexture("Texture/moon.jpg");
-    TextureArray[1] = LoadTexture("Texture/neptune.jpg");
+    memset(TextureArray, 0, sizeof(TextureArray) * 6);
+    TextureArray[0] = LoadTexture("Texture/earth.jpg");
+    TextureArray[1] = LoadTexture("Texture/moon.jpg");
     TextureArray[2] = LoadTexture("Texture/sun.jpg");
     TextureArray[3] = LoadTexture("Texture/mercury.jpg");
     TextureArray[4] = LoadTexture("Texture/mars.jpg");
@@ -75,10 +75,6 @@ void BindTexture(){
     for(int i = 0; i < TextureNum; i++) {
         //std::cout << "TextureID[" << i << "] = " << TextureID[i] << std::endl; 
         glBindTexture(GL_TEXTURE_2D, TextureID[i]);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
         //glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
         if(TextureArray[i].nrChannels == 3) {
             glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, TextureArray[i].width, TextureArray[i].height, 0, GL_RGB, GL_UNSIGNED_BYTE, TextureArray[i].data);
@@ -86,7 +82,8 @@ void BindTexture(){
             glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, TextureArray[i].width, TextureArray[i].height, 0, GL_RGBA, GL_UNSIGNED_BYTE, TextureArray[i].data);
         }
         
-        
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     }
 
     for(int i = 0; i < TextureNum; i++) {
@@ -269,7 +266,7 @@ void moonmaterial() {
 
 void mercurymaterial() {
     GLfloat earth_mat_ambient[] = { 1.0f, 1.0f, 1.0f, 1.0f };  //定义材质的环境光颜色
-	GLfloat earth_mat_diffuse[] = { 1.0f, 1.0f, 1.0f, 1.0f };  //定义材质的漫反射光颜色
+	GLfloat earth_mat_diffuse[] = { 0.0f, 1.0f, 0.0f, 1.0f };  //定义材质的漫反射光颜色
 	GLfloat earth_mat_specular[] = { 0.8f, 0.8f, 0.8f, 0.2f }; //定义材质的镜面反射光颜色
 	GLfloat earth_mat_emission[] = { 0.0f, 0.0f, 0.0f, 1.0f }; //定义材质的辐射光颜色
 	GLfloat earth_mat_shininess = 30.0f;
@@ -282,7 +279,7 @@ void mercurymaterial() {
 
 void marsmaterial() {
     GLfloat earth_mat_ambient[] = { 1.0f, 1.0f, 1.0f, 1.0f };  //定义材质的环境光颜色
-	GLfloat earth_mat_diffuse[] = { 1.0f, 1.0f, 1.0f, 1.0f };  //定义材质的漫反射光颜色
+	GLfloat earth_mat_diffuse[] = { 0.0f, 1.0f, 1.0f, 1.0f };  //定义材质的漫反射光颜色
 	GLfloat earth_mat_specular[] = { 0.8f, 0.8f, 0.8f, 0.2f }; //定义材质的镜面反射光颜色
 	GLfloat earth_mat_emission[] = { 0.0f, 0.0f, 0.0f, 1.0f }; //定义材质的辐射光颜色
 	GLfloat earth_mat_shininess = 30.0f;
